@@ -1,0 +1,53 @@
+name: slept_well
+description: "Snore Watch - 智能睡眠守护应用"
+publish_to: 'none'
+version: 2.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  
+  # 用于获取真实分贝值
+  noise_meter: ^5.0.2
+  
+  # 用于保存打鼾时的录音文件
+  flutter_sound: ^9.2.13
+  
+  # 权限管理插件
+  permission_handler: ^11.0.1
+  
+  # 应用目录路径（录音文件存储）
+  path_provider: ^2.1.5
+  
+  # 音频播放（报警音乐、录音回放）
+  audioplayers: ^6.1.3
+  
+  # 屏幕唤醒（报警时保持屏幕亮起）
+  wakelock_plus: ^1.0.0
+  
+  # 新增：本地通知（用于锁屏唤醒）
+  flutter_local_notifications: ^18.0.0
+  
+  # 新增：文件选择器（用于导入自定义铃声）
+  file_picker: ^8.0.0
+  
+  # 新增：前台服务（用于息屏时保持应用运行和唤醒屏幕）
+  flutter_foreground_task: ^8.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # 音频资源文件夹
+  assets:
+    - assets/audio/

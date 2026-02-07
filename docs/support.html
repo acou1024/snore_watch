@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术支持 - 鼾声守望者</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0A1A3C 0%, #1E3A5F 100%);
+            min-height: 100vh;
+            color: #fff;
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+        }
+        h1 {
+            color: #4ECDC4;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        h2 {
+            color: #4ECDC4;
+            font-size: 20px;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(78, 205, 196, 0.3);
+        }
+        h3 {
+            color: #fff;
+            font-size: 16px;
+            margin: 20px 0 10px;
+        }
+        p {
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .faq-question {
+            color: #4ECDC4;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .contact-card {
+            background: rgba(78, 205, 196, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .contact-card a {
+            color: #4ECDC4;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+        .lang-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4ECDC4;
+            color: #0A1A3C;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .nav-links {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            color: #4ECDC4;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+    </style>
+</head>
+<body>
+    <a href="support_en.html" class="lang-switch">English</a>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">🌙</div>
+            <h1>技术支持</h1>
+            <p class="subtitle">鼾声守望者 (Snore Watch)</p>
+        </div>
+
+        <div class="nav-links">
+            <a href="privacy_policy.html">隐私政策</a>
+            <a href="support.html">技术支持</a>
+        </div>
+
+        <h2>常见问题 (FAQ)</h2>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: 应用需要哪些权限？</p>
+            <p>A: 应用需要以下权限：</p>
+            <ul>
+                <li><strong>麦克风权限（必需）：</strong>用于监测环境声音和录制打鼾声音</li>
+                <li><strong>通知权限（可选）：</strong>用于在检测到打鼾时发送提醒</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: 为什么应用检测不到打鼾？</p>
+            <p>A: 请检查以下几点：</p>
+            <ul>
+                <li>确保已授予麦克风权限</li>
+                <li>调整分贝阈值设置（建议55-65dB）</li>
+                <li>确保手机放置在距离头部1-2米的位置</li>
+                <li>避免将手机放在枕头下或被遮挡的位置</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: 两种监测模式有什么区别？</p>
+            <p>A: </p>
+            <ul>
+                <li><strong>仅监测录音（模式A）：</strong>只记录打鼾声音，不会播放叫醒音乐</li>
+                <li><strong>监测并叫醒（模式B）：</strong>检测到持续打鼾时会播放音乐提醒您调整睡姿</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: 录音文件保存在哪里？</p>
+            <p>A: 录音文件保存在应用的本地文档目录中，不会上传到任何服务器。您可以在应用内播放和删除录音。</p>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: 应用会消耗很多电量吗？</p>
+            <p>A: 应用在后台运行时会持续监测声音，会有一定的电量消耗。建议在使用时将手机连接充电器。</p>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: 如何删除所有数据？</p>
+            <p>A: 您可以：</p>
+            <ul>
+                <li>在应用内逐个删除录音文件</li>
+                <li>卸载应用将删除所有本地数据</li>
+            </ul>
+        </div>
+
+        <h2>使用技巧</h2>
+        <ul>
+            <li>将手机放置在床头柜上，距离头部约1-2米</li>
+            <li>确保手机麦克风没有被遮挡</li>
+            <li>首次使用时可以先用"仅监测录音"模式测试</li>
+            <li>根据实际情况调整分贝阈值</li>
+            <li>建议连接充电器使用</li>
+        </ul>
+
+        <h2>联系我们</h2>
+        <p>如果您遇到任何问题或有建议，请通过以下方式联系我们：</p>
+        
+        <div class="contact-card">
+            <p>📧 邮箱</p>
+            <a href="mailto:support@snorewatch.app">support@snorewatch.app</a>
+        </div>
+
+        <p>我们会在1-3个工作日内回复您的邮件。</p>
+
+        <div class="footer">
+            <p>© 2024 鼾声守望者 (Snore Watch). 保留所有权利。</p>
+            <p>版本: 2.0.0</p>
+        </div>
+    </div>
+</body>
+</html>

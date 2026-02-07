@@ -1,0 +1,33 @@
+项目名称：鼾声守望者（Snore Watch）
+开发者：宋世柯
+发送日期：2024年2月1日
+
+一、项目概述
+- Flutter睡眠监测应用
+- Android版本已完全正常
+- 需要iOS适配和上架
+
+二、文件结构
+slept_well/
+├── lib/snore_watch.dart    # 主代码
+├── assets/audio/           # 报警音频
+├── ios/                    # iOS配置
+├── android/                # Android配置
+└── pubspec.yaml           # 依赖配置
+
+三、已完成的iOS适配
+1. ios/Runner/Info.plist    # 权限配置完成
+2. ios/Runner/AppDelegate.swift # 音频会话配置
+
+四、运行说明
+1. 解压后运行：flutter pub get
+2. iOS需要：cd ios && pod install
+3. 运行：flutter run
+
+五、联系信息
+- 电话/微信：13253560056
+
+六、特别注意
+- 应用是纯本地运行，不需要服务器
+- 只需要静态网页满足苹果隐私政策要求
+- 测试音频文件已包含在assets中不做正式使用

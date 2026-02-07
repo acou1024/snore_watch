@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Support - Snore Watch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0A1A3C 0%, #1E3A5F 100%);
+            min-height: 100vh;
+            color: #fff;
+            line-height: 1.8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: #4ECDC4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+        }
+        h1 {
+            color: #4ECDC4;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+        h2 {
+            color: #4ECDC4;
+            font-size: 20px;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(78, 205, 196, 0.3);
+        }
+        p {
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .faq-question {
+            color: #4ECDC4;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .contact-card {
+            background: rgba(78, 205, 196, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .contact-card a {
+            color: #4ECDC4;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+        .lang-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4ECDC4;
+            color: #0A1A3C;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .nav-links {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            color: #4ECDC4;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+    </style>
+</head>
+<body>
+    <a href="support.html" class="lang-switch">中文</a>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">🌙</div>
+            <h1>Technical Support</h1>
+            <p class="subtitle">Snore Watch</p>
+        </div>
+
+        <div class="nav-links">
+            <a href="privacy_policy_en.html">Privacy Policy</a>
+            <a href="support_en.html">Support</a>
+        </div>
+
+        <h2>Frequently Asked Questions (FAQ)</h2>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: What permissions does the app need?</p>
+            <p>A: The app requires the following permissions:</p>
+            <ul>
+                <li><strong>Microphone (Required):</strong> Used to monitor ambient sound and record snoring</li>
+                <li><strong>Notifications (Optional):</strong> Used to send reminders when snoring is detected</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: Why isn't the app detecting snoring?</p>
+            <p>A: Please check the following:</p>
+            <ul>
+                <li>Make sure microphone permission is granted</li>
+                <li>Adjust the decibel threshold setting (recommended: 55-65dB)</li>
+                <li>Place your phone 1-2 meters from your head</li>
+                <li>Avoid placing the phone under a pillow or in an obstructed location</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: What's the difference between the two monitoring modes?</p>
+            <p>A: </p>
+            <ul>
+                <li><strong>Record Only (Mode A):</strong> Only records snoring sounds, no alarm music will play</li>
+                <li><strong>Record & Alarm (Mode B):</strong> Plays music to remind you to adjust your sleeping position when continuous snoring is detected</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: Where are recordings saved?</p>
+            <p>A: Recordings are saved in the app's local documents directory and are never uploaded to any server. You can play and delete recordings within the app.</p>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: Does the app consume a lot of battery?</p>
+            <p>A: The app continuously monitors sound while running in the background, which does consume some battery. We recommend connecting your phone to a charger while using the app.</p>
+        </div>
+
+        <div class="faq-item">
+            <p class="faq-question">Q: How do I delete all data?</p>
+            <p>A: You can:</p>
+            <ul>
+                <li>Delete recording files one by one within the app</li>
+                <li>Uninstall the app to delete all local data</li>
+            </ul>
+        </div>
+
+        <h2>Usage Tips</h2>
+        <ul>
+            <li>Place your phone on a nightstand, about 1-2 meters from your head</li>
+            <li>Make sure the phone's microphone is not obstructed</li>
+            <li>Try "Record Only" mode first when using for the first time</li>
+            <li>Adjust the decibel threshold based on your actual situation</li>
+            <li>We recommend using the app while charging</li>
+        </ul>
+
+        <h2>Contact Us</h2>
+        <p>If you encounter any issues or have suggestions, please contact us:</p>
+        
+        <div class="contact-card">
+            <p>📧 Email</p>
+            <a href="mailto:support@snorewatch.app">support@snorewatch.app</a>
+        </div>
+
+        <p>We will respond to your email within 1-3 business days.</p>
+
+        <div class="footer">
+            <p>© 2024 Snore Watch. All rights reserved.</p>
+            <p>Version: 2.0.0</p>
+        </div>
+    </div>
+</body>
+</html>
