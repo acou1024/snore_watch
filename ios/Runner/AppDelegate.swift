@@ -12,20 +12,20 @@ import AudioToolbox
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        // 1. 配置音频会话（关键步骤）
-        configureAudioSession()
-        
-        // 2. 注册Flutter插件
+        // 1. 注册Flutter插件（必须最先调用）
         GeneratedPluginRegistrant.register(with: self)
         
-        // 3. 设置MethodChannel
-        setupMethodChannel()
+        // 2. 调用父类方法
+        let result = super.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        // 4. 请求通知权限
-        requestNotificationPermission()
+        // 3. 延迟初始化其他功能，避免启动时崩溃
+        DispatchQueue.main.async { [weak self] in
+            self?.setupMethodChannel()
+            self?.requestNotificationPermission()
+            self?.configureAudioSession()
+        }
         
-        // 5. 调用父类方法
-        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+        return result
     }
     
     // 设置Flutter MethodChannel

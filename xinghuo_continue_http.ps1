@@ -29,7 +29,7 @@ $portFile = Join-Path $workspace ".xinghuo_continue_port"
 if (Test-Path $portFile) {
     $port = (Get-Content $portFile -Raw -Encoding UTF8).Trim()
 } else {
-    $port = "58726"
+    $port = "12644"
 }
 
 # 构建 JSON 请求体
