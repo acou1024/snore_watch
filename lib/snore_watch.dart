@@ -324,21 +324,36 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   
   // 新增：初始化本地通知
   void _initializeNotifications() {
-    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      // iOS初始化设置（为空，因为iOS不需要本地通知来唤醒屏幕）
-      iOS: DarwinInitializationSettings(),
-    );
-    
-    _flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-    );
+    try {
+      _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+      
+      const AndroidInitializationSettings initializationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
+      
+      // iOS初始化设置
+      const DarwinInitializationSettings initializationSettingsIOS =
+          DarwinInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+      );
+      
+      const InitializationSettings initializationSettings =
+          InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsIOS,
+      );
+      
+      _flutterLocalNotificationsPlugin.initialize(
+        initializationSettings,
+      ).then((_) {
+        print('✅ 本地通知初始化成功');
+      }).catchError((e) {
+        print('❌ 本地通知初始化失败: $e');
+      });
+    } catch (e) {
+      print('❌ 本地通知初始化异常: $e');
+    }
   }
   
   // 新增：显示全屏通知（用于锁屏唤醒）- 仅Android
