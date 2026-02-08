@@ -1025,14 +1025,17 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   
   // 开始真实守护 - 修改：添加iOS音频配置
   Future<void> _startRealGuard() async {
-    // 先请求权限
-    await _requestPermissions();
-    
-    final micStatus = await Permission.microphone.status;
-    if (!micStatus.isGranted) {
-      _showPermissionSnackBar();
-      return;
+    // iOS: 原生已申请权限，直接检查
+    // Android: 使用permission_handler申请
+    if (Platform.isAndroid) {
+      await _requestPermissions();
+      final micStatus = await Permission.microphone.status;
+      if (!micStatus.isGranted) {
+        _showPermissionSnackBar();
+        return;
+      }
     }
+    // iOS不再使用permission_handler检查，因为原生已处理
     
     // iOS特殊处理：检查后台音频权限
     if (Platform.isIOS) {
