@@ -19,8 +19,7 @@ import AudioToolbox
         // 延迟初始化，避免启动时崩溃
         DispatchQueue.main.async { [weak self] in
             self?.setupMethodChannel()
-            self?.requestNotificationPermission()
-            self?.configureAudioSession()
+            self?.requestAllPermissions()
         }
         
         return result
@@ -68,10 +67,25 @@ import AudioToolbox
         }
     }
     
-    private func requestNotificationPermission() {
+    // 启动时申请所有权限
+    private func requestAllPermissions() {
+        // 1. 申请通知权限
         let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            print("通知权限: \(granted), error: \(String(describing: error))")
+        }
         center.delegate = self
+        
+        // 2. 申请麦克风权限
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            print("麦克风权限: \(granted)")
+            if granted {
+                // 权限获取后配置音频会话
+                DispatchQueue.main.async { [weak self] in
+                    self?.configureAudioSession()
+                }
+            }
+        }
     }
     
     private func wakeUpScreen() {
