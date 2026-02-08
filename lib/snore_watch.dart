@@ -992,6 +992,9 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   
   // 开始真实守护 - 修改：添加iOS音频配置
   Future<void> _startRealGuard() async {
+    // 先请求权限
+    await _requestPermissions();
+    
     final micStatus = await Permission.microphone.status;
     if (!micStatus.isGranted) {
       _showPermissionSnackBar();
