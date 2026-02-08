@@ -288,7 +288,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     
     // 新增：延迟检查权限并显示提示
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkAndShowPermissionDialog();
+      _requestAllPermissionsOnStartup();
     });
   }
   
@@ -962,6 +962,39 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   // 新增：检查是否为自定义铃声
   bool _isCustomRingtone(String name) {
     return _customMusicOptions.contains(name);
+  }
+  
+  // 启动时申请所有权限
+  Future<void> _requestAllPermissionsOnStartup() async {
+    print('启动时申请所有权限...');
+    
+    // 1. 申请麦克风权限（录音必需）
+    final micStatus = await Permission.microphone.request();
+    print('麦克风权限: $micStatus');
+    
+    // 2. 申请通知权限
+    final notifStatus = await Permission.notification.request();
+    print('通知权限: $notifStatus');
+    
+    if (Platform.isAndroid) {
+      // Android: 申请音频权限
+      final audioStatus = await Permission.audio.request();
+      print('音频权限: $audioStatus');
+      
+      // Android: 申请存储权限（用于保存录音）
+      final storageStatus = await Permission.storage.request();
+      print('存储权限: $storageStatus');
+    }
+    
+    if (Platform.isIOS) {
+      // iOS: 申请媒体库权限（用于导入铃声）
+      final mediaStatus = await Permission.mediaLibrary.request();
+      print('媒体库权限: $mediaStatus');
+      
+      // iOS: 申请相册权限（file_picker可能需要）
+      final photosStatus = await Permission.photos.request();
+      print('相册权限: $photosStatus');
+    }
   }
   
   // 请求权限 - 修改：添加iOS兼容性
