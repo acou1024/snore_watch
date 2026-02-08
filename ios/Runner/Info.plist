@@ -61,7 +61,15 @@
     <key>NSUserNotificationsUsageDescription</key>
     <string>鼾声守望者需要发送通知来提醒您检测到的打鼾情况</string>
     
-    <!-- 3. 后台处理权限（可选但推荐） -->
+    <!-- 4. 媒体库访问权限（用于导入自定义铃声） -->
+    <key>NSAppleMusicUsageDescription</key>
+    <string>鼾声守望者需要访问您的音乐库以导入自定义铃声</string>
+    
+    <!-- 5. 相册访问权限（file_picker可能需要） -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>鼾声守望者需要访问相册以选择文件</string>
+    
+    <!-- 6. 后台处理权限（可选但推荐） -->
     <key>BGTaskSchedulerPermittedIdentifiers</key>
     <array>
         <string>$(PRODUCT_BUNDLE_IDENTIFIER).background-task</string>
