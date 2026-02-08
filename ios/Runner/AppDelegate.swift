@@ -5,7 +5,7 @@ import UserNotifications
 import AudioToolbox
 
 @main
-@objc class AppDelegate: FlutterAppDelegate, UNUserNotificationCenterDelegate {
+@objc class AppDelegate: FlutterAppDelegate {
     private var methodChannel: FlutterMethodChannel?
 
     override func application(
@@ -245,10 +245,8 @@ import AudioToolbox
         methodChannel?.invokeMethod("onAppResumed", arguments: nil)
     }
     
-    // MARK: - UNUserNotificationCenterDelegate
-    
     // 允许在前台显示通知
-    func userNotificationCenter(
+    override func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
@@ -262,7 +260,7 @@ import AudioToolbox
     }
     
     // 用户点击通知时的处理
-    func userNotificationCenter(
+    override func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
