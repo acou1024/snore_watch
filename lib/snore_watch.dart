@@ -884,8 +884,10 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   // 新增：导入自定义铃声
   Future<void> _importCustomRingtone() async {
     try {
+      // 使用custom类型，允许选择任意文件（包括"文件"App中的文件）
       FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.audio,
+        type: FileType.custom,
+        allowedExtensions: ['mp3', 'wav', 'm4a', 'aac', 'ogg', 'flac'],
         allowMultiple: false,
       );
       
