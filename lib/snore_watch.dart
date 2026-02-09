@@ -1378,7 +1378,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   }
   
   // 分析打鼾模式（每分钟调用一次）
-  void _analyzeSnorePattern() {
+  Future<void> _analyzeSnorePattern() async {
     if (_recentDbValues.isEmpty) return;
     
     print('分钟分析: 超阈值次数 = $_snoreCountInCurrentMinute, 模式 = ${_monitorMode == 0 ? "仅监测" : "监测+叫醒"}, 录音状态 = $_isRecording, 录音路径 = $_currentRecordingPath');
@@ -1394,7 +1394,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
       if (_isRecording || _currentRecordingPath != null) {
         final pathToSave = _currentRecordingPath;
         print('准备保存录音: $pathToSave');
-        _stopTemporaryRecordingAndSave(pathToSave, true);
+        await _stopTemporaryRecordingAndSave(pathToSave, true);
       } else {
         print('警告：没有正在进行的录音可保存');
       }
@@ -1408,7 +1408,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     } else {
       // 如果不是打鼾，删除临时录音
       if (_isRecording || _currentRecordingPath != null) {
-        _stopTemporaryRecordingAndSave(_currentRecordingPath, false);
+        await _stopTemporaryRecordingAndSave(_currentRecordingPath, false);
       }
     }
     
@@ -1466,6 +1466,9 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
           }
           
           _realRecordings.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+          if (mounted) {
+            setState(() {}); // 刷新UI显示新录音
+          }
           print('录音已保存到历史: $recordingPath, 当前录音数: ${_realRecordings.length}');
         } else {
           print('警告：录音文件不存在: $recordingPath');
