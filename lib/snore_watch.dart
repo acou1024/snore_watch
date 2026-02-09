@@ -1462,10 +1462,25 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     // 停止噪音监测
     _stopNoiseMonitoring();
     
+    // 关键修复：停止录音器，释放音频通道给播放器
+    // iOS的playAndRecord模式下，录音会导致播放音量变小
+    try {
+      if (_soundRecorder.isRecording) {
+        await _soundRecorder.stopRecorder();
+        print('报警前停止录音器');
+      }
+      // 关闭录音器释放麦克风
+      await _soundRecorder.closeRecorder();
+      print('报警前关闭录音器');
+    } catch (e) {
+      print('停止/关闭录音器失败: $e');
+    }
+    
     // 设置报警状态
     if (mounted) {
       setState(() {
         _isAlarming = true;
+        _isRecording = false;
         _pendingAlarmDialog = true; // 标记有待显示的弹窗
       });
     }
@@ -1613,6 +1628,14 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     await _stopTemporaryRecording(saveToHistory: false); // 停止时不保存
     await _stopAlarm();
     await _cancelNotification(); // 取消通知
+    
+    // 关键修复：守护结束后关闭录音器，释放麦克风
+    try {
+      await _soundRecorder.closeRecorder();
+      print('守护结束，录音器已关闭');
+    } catch (e) {
+      print('关闭录音器失败: $e');
+    }
     
     // 新增：确保在守护结束时禁用屏幕唤醒
     await WakelockPlus.disable();
