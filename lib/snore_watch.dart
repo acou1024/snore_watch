@@ -429,42 +429,104 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
       context: context,
       barrierDismissible: false,
       builder: (ctx) {
-        return AlertDialog(
-          backgroundColor: const Color(0xFF1E3A5F),
-          title: Row(
-            children: [
-              const Icon(Icons.warning, color: Colors.orange, size: 28),
-              const SizedBox(width: 10),
-              Text(l10n?.get('sleep_reminder') ?? '睡眠提醒', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            ],
-          ),
-          content: SizedBox(
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
             width: MediaQuery.of(ctx).size.width * 0.85,
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF1B2838),
+                  Color(0xFF243447),
+                  Color(0xFF1B2838),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: const Color(0xFF4ECDC4).withOpacity(0.3),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF4ECDC4).withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color(0xFFFF9800).withOpacity(0.2),
+                        const Color(0xFFFF5722).withOpacity(0.2),
+                      ],
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.nightlight_round,
+                    color: Color(0xFFFFB74D),
+                    size: 36,
+                  ),
+                ),
+                const SizedBox(height: 20),
                 Text(
                   l10n?.get('snoring_detected') ?? '检测到持续打鼾',
-                  style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   l10n?.get('adjust_position') ?? '请调整睡姿缓解呼吸不畅',
-                  style: const TextStyle(color: Colors.orange, fontSize: 16, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Color(0xFFFFB74D),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 28),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                      _stopAlarm();
+                      print('用户确认报警，继续监测');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4ECDC4),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      l10n?.get('ok_continue') ?? '好的，继续监测',
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-                _stopAlarm();
-                print('用户确认报警，继续监测');
-              },
-              child: Text(l10n?.get('ok_continue') ?? '好的，继续监测', style: const TextStyle(color: Color(0xFF4ECDC4), fontSize: 16)),
-            ),
-          ],
         );
       },
     );
