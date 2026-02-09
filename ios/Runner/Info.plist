@@ -1,94 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleDisplayName</key>
-	<string>鼾声守望者</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>slept_well</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-    
-    <!-- === iOS 权限配置开始 === -->
-    
-    <!-- 1. 麦克风权限（必须） -->
-    <key>NSMicrophoneUsageDescription</key>
-    <string>鼾声守望者需要访问麦克风来监测您的打鼾情况，以便在检测到持续打鼾时提醒您</string>
-    
-    <!-- 2. 后台音频权限（必须） -->
-    <key>UIBackgroundModes</key>
-    <array>
-        <string>audio</string>
-        <string>processing</string>
-    </array>
-    
-    <!-- 3. 通知权限描述 -->
-    <key>NSUserNotificationsUsageDescription</key>
-    <string>鼾声守望者需要发送通知来提醒您检测到的打鼾情况</string>
-    
-    <!-- 4. 媒体库访问权限（用于导入自定义铃声） -->
-    <key>NSAppleMusicUsageDescription</key>
-    <string>鼾声守望者需要访问您的音乐库以导入自定义铃声</string>
-    
-    <!-- 5. 相册访问权限（file_picker可能需要） -->
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>鼾声守望者需要访问相册以选择文件</string>
-    
-    <!-- 6. 后台处理权限（可选但推荐） -->
-    <key>BGTaskSchedulerPermittedIdentifiers</key>
-    <array>
-        <string>$(PRODUCT_BUNDLE_IDENTIFIER).background-task</string>
-    </array>
-    
-    <!-- 4. 防止iOS在后台暂停应用（可选） -->
-    <key>UIApplicationExitsOnSuspend</key>
-    <false/>
-    
-    <!-- 5. 请求始终使用位置权限的说明（如果未来需要） -->
-    <!-- 注意：目前我们不需要位置权限，但保留这个注释以便将来使用 -->
-    <!--
+	<dict>
+		<key>CFBundleDevelopmentRegion</key>
+		<string>$(DEVELOPMENT_LANGUAGE)</string>
+		<key>CFBundleDisplayName</key>
+		<string>鼾声守望者</string>
+		<key>CFBundleExecutable</key>
+		<string>$(EXECUTABLE_NAME)</string>
+		<key>CFBundleIdentifier</key>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+		<key>CFBundleInfoDictionaryVersion</key>
+		<string>6.0</string>
+		<key>CFBundleName</key>
+		<string>slept_well</string>
+		<key>CFBundlePackageType</key>
+		<string>APPL</string>
+		<key>CFBundleShortVersionString</key>
+		<string>$(FLUTTER_BUILD_NAME)</string>
+		<key>CFBundleSignature</key>
+		<string>????</string>
+		<key>CFBundleVersion</key>
+		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<key>LSRequiresIPhoneOS</key>
+		<true/>
+		<key>UILaunchStoryboardName</key>
+		<string>LaunchScreen</string>
+		<key>UIMainStoryboardFile</key>
+		<string>Main</string>
+		<key>UISupportedInterfaceOrientations</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+		</array>
+		<key>UISupportedInterfaceOrientations~ipad</key>
+		<array>
+			<string>UIInterfaceOrientationPortrait</string>
+			<string>UIInterfaceOrientationPortraitUpsideDown</string>
+			<string>UIInterfaceOrientationLandscapeLeft</string>
+			<string>UIInterfaceOrientationLandscapeRight</string>
+		</array>
+		<key>CADisableMinimumFrameDurationOnPhone</key>
+		<true/>
+		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<true/>
+		<!-- === iOS 权限配置开始 === -->
+		<!-- 1. 麦克风权限（必须） -->
+		<key>NSMicrophoneUsageDescription</key>
+		<string>鼾声守望者需要访问麦克风来监测您的打鼾情况，以便在检测到持续打鼾时提醒您</string>
+		<!-- 2. 后台音频权限（必须） -->
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>audio</string>
+			<string>processing</string>
+		</array>
+		<!-- 3. 通知权限描述 -->
+		<key>NSUserNotificationsUsageDescription</key>
+		<string>鼾声守望者需要发送通知来提醒您检测到的打鼾情况</string>
+		<!-- 4. 媒体库访问权限（用于导入自定义铃声） -->
+		<key>NSAppleMusicUsageDescription</key>
+		<string>鼾声守望者需要访问您的音乐库以导入自定义铃声</string>
+		<!-- 5. 相册访问权限（file_picker可能需要） -->
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>鼾声守望者需要访问相册以选择文件</string>
+		<!-- 6. 后台处理权限（可选但推荐） -->
+		<key>BGTaskSchedulerPermittedIdentifiers</key>
+		<array>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER).background-task</string>
+		</array>
+		<!-- 4. 防止iOS在后台暂停应用（可选） -->
+		<key>UIApplicationExitsOnSuspend</key>
+		<false/>
+		<!-- 5. 请求始终使用位置权限的说明（如果未来需要） -->
+		<!-- 注意：目前我们不需要位置权限，但保留这个注释以便将来使用 -->
+		<!--
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>需要在后台持续监测打鼾</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>需要在后台持续监测打鼾</string>
     -->
-    
-    <!-- === iOS 权限配置结束 === -->
-    
-</dict>
+		<!-- === iOS 权限配置结束 === -->
+		<key>UIStatusBarHidden</key>
+		<false/>
+	</dict>
 </plist>
