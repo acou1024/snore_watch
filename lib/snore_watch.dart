@@ -1571,24 +1571,45 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     }
   }
   
+  // 新增：将Flutter asset复制到临时目录（iOS原生播放需要）
+  Future<String?> _copyAssetToTemp(String assetPath) async {
+    try {
+      final byteData = await rootBundle.load('assets/$assetPath');
+      final tempDir = await getTemporaryDirectory();
+      final fileName = assetPath.split('/').last;
+      final tempFile = File('${tempDir.path}/$fileName');
+      await tempFile.writeAsBytes(byteData.buffer.asUint8List());
+      print('Asset已复制到临时目录: ${tempFile.path}');
+      return tempFile.path;
+    } catch (e) {
+      print('复制asset到临时目录失败: $e');
+      return null;
+    }
+  }
+  
   // 播放报警音乐 - 优化版本（支持自定义铃声）
   Future<void> _playAlarmMusic() async {
     try {
       // iOS: 使用原生AVAudioPlayer播放，确保息屏时也能播放
       if (Platform.isIOS) {
         try {
+          String? audioFilePath;
+          
           // 检查是否为自定义铃声
           if (_isCustomRingtone(_selectedMusic)) {
-            final customFilePath = _customMusicFiles[_selectedMusic];
-            if (customFilePath != null) {
-              await _screenWakeChannel.invokeMethod('playAlarmAudio', {'filePath': customFilePath});
-              print('iOS原生播放自定义铃声: $_selectedMusic');
-            } else {
-              await _screenWakeChannel.invokeMethod('playAlarmAudio');
-              print('iOS原生播放默认铃声');
-            }
+            audioFilePath = _customMusicFiles[_selectedMusic];
           } else {
-            // 内置铃声使用默认播放
+            // 内置铃声：需要将asset复制到临时目录
+            final musicFile = _musicFiles[_selectedMusic];
+            if (musicFile != null) {
+              audioFilePath = await _copyAssetToTemp('audio/$musicFile');
+            }
+          }
+          
+          if (audioFilePath != null) {
+            await _screenWakeChannel.invokeMethod('playAlarmAudio', {'filePath': audioFilePath});
+            print('iOS原生播放铃声: $_selectedMusic, 路径: $audioFilePath');
+          } else {
             await _screenWakeChannel.invokeMethod('playAlarmAudio');
             print('iOS原生播放默认铃声');
           }
