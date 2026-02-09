@@ -1427,10 +1427,14 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   // 新增：停止录音并保存的辅助方法
   Future<void> _stopTemporaryRecordingAndSave(String? recordingPath, bool saveToHistory) async {
     try {
-      // 先停止录音器
-      if (_isRecording) {
-        await _soundRecorder.stopRecorder();
-        print('录音器已停止');
+      // 先停止录音器（无论_isRecording状态如何，都尝试停止）
+      try {
+        if (_soundRecorder.isRecording) {
+          await _soundRecorder.stopRecorder();
+          print('录音器已停止');
+        }
+      } catch (e) {
+        print('停止录音器时出错: $e');
       }
       _recordingStopTimer?.cancel();
       
@@ -1442,34 +1446,46 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
         }
         
         final file = File(recordingPath);
+        print('检查录音文件是否存在: $recordingPath');
+        
+        // 等待一小段时间确保文件写入完成
+        await Future.delayed(const Duration(milliseconds: 500));
+        
         if (await file.exists()) {
           final stat = await file.stat();
+          final fileSize = stat.size;
+          print('录音文件存在，大小: $fileSize bytes');
           
-          _realRecordings.insert(0, SnoreRecording(
-            filePath: recordingPath,
-            dateTime: stat.modified,
-            duration: const Duration(seconds: 60),
-            maxDb: maxDb,
-          ));
-          
-          // 限制最多保存20个录音文件
-          if (_realRecordings.length > 20) {
-            final oldestRecording = _realRecordings.removeLast();
-            try {
-              final oldFile = File(oldestRecording.filePath);
-              if (await oldFile.exists()) {
-                await oldFile.delete();
+          // 只保存有内容的文件（大于1KB）
+          if (fileSize > 1024) {
+            _realRecordings.insert(0, SnoreRecording(
+              filePath: recordingPath,
+              dateTime: stat.modified,
+              duration: const Duration(seconds: 60),
+              maxDb: maxDb,
+            ));
+            
+            // 限制最多保存20个录音文件
+            if (_realRecordings.length > 20) {
+              final oldestRecording = _realRecordings.removeLast();
+              try {
+                final oldFile = File(oldestRecording.filePath);
+                if (await oldFile.exists()) {
+                  await oldFile.delete();
+                }
+              } catch (e) {
+                print('删除旧文件失败: $e');
               }
-            } catch (e) {
-              print('删除旧文件失败: $e');
             }
+            
+            _realRecordings.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+            if (mounted) {
+              setState(() {}); // 刷新UI显示新录音
+            }
+            print('录音已保存到历史: $recordingPath, 当前录音数: ${_realRecordings.length}');
+          } else {
+            print('警告：录音文件太小，跳过保存: $fileSize bytes');
           }
-          
-          _realRecordings.sort((a, b) => b.dateTime.compareTo(a.dateTime));
-          if (mounted) {
-            setState(() {}); // 刷新UI显示新录音
-          }
-          print('录音已保存到历史: $recordingPath, 当前录音数: ${_realRecordings.length}');
         } else {
           print('警告：录音文件不存在: $recordingPath');
         }
