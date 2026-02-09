@@ -1414,7 +1414,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
       
       // 只有模式B（监测+叫醒）才触发报警
       if (_monitorMode == 1) {
-        _triggerRealAlarm();
+        await _triggerRealAlarm();
       } else {
         print('模式A：仅保存录音，不触发叫醒');
       }
@@ -1539,22 +1539,20 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     if (_isAlarming) return;
     
     print('=== 检测到持续打鼾，触发真实报警 ===');
+    print('当前录音数: ${_realRecordings.length}');
     
     // 停止噪音监测
     _stopNoiseMonitoring();
     
-    // 关键修复：停止录音器，释放音频通道给播放器
-    // iOS的playAndRecord模式下，录音会导致播放音量变小
+    // 注意：录音已经在 _stopTemporaryRecordingAndSave 中停止并保存了
+    // 这里只需要确保录音器已停止（不要关闭，以便后续可以继续录音）
     try {
       if (_soundRecorder.isRecording) {
         await _soundRecorder.stopRecorder();
         print('报警前停止录音器');
       }
-      // 关闭录音器释放麦克风
-      await _soundRecorder.closeRecorder();
-      print('报警前关闭录音器');
     } catch (e) {
-      print('停止/关闭录音器失败: $e');
+      print('停止录音器失败: $e');
     }
     
     // 设置报警状态
