@@ -61,6 +61,12 @@ import AudioToolbox
             case "vibrate":
                 self?.vibrate()
                 result(true)
+            case "configureAudioForPlayback":
+                self?.configureAudioSessionForPlayback()
+                result(true)
+            case "configureAudioForRecording":
+                self?.configureAudioSessionForRecording()
+                result(true)
             default:
                 result(FlutterMethodNotImplemented)
             }
@@ -140,10 +146,40 @@ import AudioToolbox
     private func configureAudioSession() {
         do {
             let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .mixWithOthers])
+            try audioSession.setCategory(
+                .playAndRecord, 
+                mode: .default, 
+                options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers]
+            )
             try audioSession.setActive(true)
+            try audioSession.overrideOutputAudioPort(.speaker)
         } catch {
             print("音频会话配置失败: \(error)")
+        }
+    }
+    
+    private func configureAudioSessionForPlayback() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try audioSession.setActive(true)
+            try audioSession.overrideOutputAudioPort(.speaker)
+        } catch {
+            print("播放音频会话配置失败: \(error)")
+        }
+    }
+    
+    private func configureAudioSessionForRecording() {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(
+                .playAndRecord, 
+                mode: .default, 
+                options: [.defaultToSpeaker, .allowBluetooth, .mixWithOthers]
+            )
+            try audioSession.setActive(true)
+        } catch {
+            print("录音音频会话配置失败: \(error)")
         }
     }
     
