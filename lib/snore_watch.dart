@@ -169,12 +169,12 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   final List<int> _hourOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   
   // 叫醒音乐
-  String _selectedMusic = '海浪声';
+  String _selectedMusic = '溪流声';
   final List<String> _musicOptions = [
     // 自然音
-    '海浪声', '雨声', '溪流声', '瀑布声', '森林声', '风声', '雷声', '虫鸣声', '蛙鸣声', '鸟鸣',
+    '溪流声', '瀑布声', '森林声', '风声', '雷声', '虫鸣声', '蛙鸣声',
     // 轻音乐
-    '钢琴曲', '吉他曲', '竖琴曲', '长笛曲', '音乐盒', '风铃声',
+    '钢琴曲', '吉他曲', '竖琴曲', '长笛曲', '音乐盒',
     // 白噪音
     '白噪音', '粉噪音', '篝火声',
   ];
@@ -216,8 +216,6 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   // 音频文件映射
   final Map<String, String> _musicFiles = {
     // 自然音
-    '海浪声': '海浪声.wav',
-    '雨声': '雨声.wav',
     '溪流声': '溪流声.mp3',
     '瀑布声': '瀑布声.mp3',
     '森林声': '森林声.mp3',
@@ -225,14 +223,12 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     '雷声': '雷声.mp3',
     '虫鸣声': '虫鸣声.mp3',
     '蛙鸣声': '蛙鸣声.mp3',
-    '鸟鸣': '鸟鸣.wav',
     // 轻音乐
     '钢琴曲': '钢琴曲.mp3',
     '吉他曲': '吉他曲.mp3',
     '竖琴曲': '竖琴曲.mp3',
     '长笛曲': '长笛曲.mp3',
     '音乐盒': '音乐盒.mp3',
-    '风铃声': '风铃声.wav',
     // 白噪音
     '白噪音': '白噪音.mp3',
     '粉噪音': '粉噪音.mp3',
