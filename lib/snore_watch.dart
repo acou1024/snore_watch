@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart'; // 新增：用于屏幕唤醒
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'; // 新增：本地通知
 import 'package:file_picker/file_picker.dart'; // 新增：文件选择器
+import 'package:shared_preferences/shared_preferences.dart'; // 新增：本地存储
 import 'l10n/app_localizations.dart'; // 多语言支持
 
 void main() {
@@ -279,6 +280,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     _loadExistingRecordings();
     _initializeNotifications(); // 初始化通知
     _loadCustomRingtones(); // 加载自定义铃声
+    _loadUserSettings(); // 加载用户设置
     
     // 新增：监听应用生命周期
     _setupBackButtonHandler();
@@ -964,6 +966,43 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   // 新增：检查是否为自定义铃声
   bool _isCustomRingtone(String name) {
     return _customMusicOptions.contains(name);
+  }
+  
+  // 新增：加载用户设置
+  Future<void> _loadUserSettings() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      
+      setState(() {
+        _selectedHours = prefs.getInt('selectedHours') ?? 8;
+        _thresholdDb = prefs.getDouble('thresholdDb') ?? 65.0;
+        _monitorMode = prefs.getInt('monitorMode') ?? 1;
+        final savedMusic = prefs.getString('selectedMusic');
+        if (savedMusic != null && (_musicOptions.contains(savedMusic) || _customMusicOptions.contains(savedMusic))) {
+          _selectedMusic = savedMusic;
+        }
+      });
+      
+      print('用户设置已加载: 时长=$_selectedHours, 阈值=$_thresholdDb, 模式=$_monitorMode, 铃声=$_selectedMusic');
+    } catch (e) {
+      print('加载用户设置失败: $e');
+    }
+  }
+  
+  // 新增：保存用户设置
+  Future<void> _saveUserSettings() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      
+      await prefs.setInt('selectedHours', _selectedHours);
+      await prefs.setDouble('thresholdDb', _thresholdDb);
+      await prefs.setInt('monitorMode', _monitorMode);
+      await prefs.setString('selectedMusic', _selectedMusic);
+      
+      print('用户设置已保存');
+    } catch (e) {
+      print('保存用户设置失败: $e');
+    }
   }
   
   // 启动时申请所有权限
@@ -2190,7 +2229,10 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
                         icon: Icons.mic_rounded,
                         title: AppLocalizations.of(context)?.get('mode_record_only') ?? '仅监测录音',
                         subtitle: AppLocalizations.of(context)?.get('mode_record_only_desc') ?? '记录打鼾，不叫醒',
-                        onTap: () => setState(() => _monitorMode = 0),
+                        onTap: () {
+                          setState(() => _monitorMode = 0);
+                          _saveUserSettings();
+                        },
                       )),
                       const SizedBox(width: 12),
                       Expanded(child: _buildModeCard(
@@ -2198,7 +2240,10 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
                         icon: Icons.alarm_rounded,
                         title: AppLocalizations.of(context)?.get('mode_record_alarm') ?? '监测并叫醒',
                         subtitle: AppLocalizations.of(context)?.get('mode_record_alarm_desc') ?? '检测打鼾时播放音乐',
-                        onTap: () => setState(() => _monitorMode = 1),
+                        onTap: () {
+                          setState(() => _monitorMode = 1);
+                          _saveUserSettings();
+                        },
                       )),
                     ],
                   ),
@@ -2231,7 +2276,10 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
                         Wrap(
                           spacing: 8, runSpacing: 8, alignment: WrapAlignment.center,
                           children: _hourOptions.map((hour) => GestureDetector(
-                            onTap: () => setState(() => _selectedHours = hour),
+                            onTap: () {
+                              setState(() => _selectedHours = hour);
+                              _saveUserSettings();
+                            },
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
                               width: 48,
@@ -2294,7 +2342,10 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
                             ],
                           ),
                         )).toList(),
-                        onChanged: (value) => setState(() => _selectedMusic = value!),
+                        onChanged: (value) {
+                          setState(() => _selectedMusic = value!);
+                          _saveUserSettings();
+                        },
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -2341,6 +2392,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
                         value: _thresholdDb, min: 40, max: 80, divisions: 40,
                         label: '${_thresholdDb.toInt()}dB',
                         onChanged: (value) => setState(() => _thresholdDb = value),
+                        onChangeEnd: (value) => _saveUserSettings(),
                         activeColor: const Color(0xFF4ECDC4),
                       ),
                       Padding(

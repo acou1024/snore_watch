@@ -39,6 +39,9 @@ dependencies:
   
   # 新增：前台服务（用于息屏时保持应用运行和唤醒屏幕）
   flutter_foreground_task: ^8.0.0
+  
+  # 新增：本地存储（用于保存用户设置）
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
