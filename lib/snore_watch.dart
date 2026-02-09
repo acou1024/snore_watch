@@ -1089,6 +1089,16 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
       }
     }
     
+    // 重置录音状态
+    _recordingStopTimer?.cancel();
+    try {
+      if (_soundRecorder.isRecording) {
+        await _soundRecorder.stopRecorder();
+      }
+    } catch (e) {
+      print('重置录音器失败: $e');
+    }
+    
     if (mounted) {
       setState(() {
         _pageState = 2;
@@ -1100,8 +1110,11 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
         _totalSnoreEvents = 0; // 重置总打鼾事件计数
         _guardStartTime = DateTime.now(); // 记录守护开始时间
         _isInRecordingCycle = false;
+        _isRecording = false; // 重置录音状态
+        _currentRecordingPath = null; // 重置录音路径
         _isPlayingRecording = false; // 重置播放状态
         _currentPlayingIndex = null; // 重置播放索引
+        _realRecordings.clear(); // 清空本次守护的录音列表
       });
     }
     
