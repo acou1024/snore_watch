@@ -161,11 +161,8 @@ import AudioToolbox
     private func configureAudioSessionForPlayback() {
         do {
             let audioSession = AVAudioSession.sharedInstance()
-            // 先停用当前会话
-            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-            // 使用纯播放模式，不混合其他音频，获得最大音量
-            try audioSession.setCategory(.playback, mode: .default, options: [])
-            // 重新激活
+            // 使用纯播放模式，获得最大音量
+            try audioSession.setCategory(.playback, mode: .default, options: [.duckOthers])
             try audioSession.setActive(true)
             // 强制使用扬声器输出
             try audioSession.overrideOutputAudioPort(.speaker)
