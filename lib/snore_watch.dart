@@ -205,6 +205,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   String? _currentRecordingPath;
   Timer? _recordingStopTimer;
   final List<SnoreRecording> _realRecordings = []; // 真实录音列表
+  int _currentSessionRecordingCount = 0; // 本次守护的录音数量
   
   // 报警状态
   bool _isAlarming = false;
@@ -1115,6 +1116,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
         _isPlayingRecording = false; // 重置播放状态
         _currentPlayingIndex = null; // 重置播放索引
         _realRecordings.clear(); // 清空本次守护的录音列表
+        _currentSessionRecordingCount = 0; // 重置本次守护录音计数
       });
     }
     
@@ -1495,7 +1497,8 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
             if (mounted) {
               setState(() {}); // 刷新UI显示新录音
             }
-            print('录音已保存到历史: $recordingPath, 当前录音数: ${_realRecordings.length}');
+            _currentSessionRecordingCount++; // 增加本次守护录音计数
+            print('录音已保存到历史: $recordingPath, 本次守护录音数: $_currentSessionRecordingCount, 总录音数: ${_realRecordings.length}');
           } else {
             print('警告：录音文件太小，跳过保存: $fileSize bytes');
           }
@@ -1851,8 +1854,8 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
               _monitorMode == 0 ? (l10n?.get('mode_record_only') ?? '仅监测录音') : (l10n?.get('mode_record_alarm') ?? '监测并叫醒'),
             ),
             const SizedBox(height: 16),
-            // 录音数量
-            _buildSummaryRow(Icons.folder, l10n?.get('saved_recordings') ?? '保存录音', '${_realRecordings.length} ${l10n?.get('count_unit') ?? '个'}'),
+            // 录音数量（显示本次守护的录音数）
+            _buildSummaryRow(Icons.folder, l10n?.get('saved_recordings') ?? '保存录音', '$_currentSessionRecordingCount ${l10n?.get('count_unit') ?? '个'}'),
             const SizedBox(height: 20),
             // 评价
             Container(
