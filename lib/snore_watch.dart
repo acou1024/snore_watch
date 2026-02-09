@@ -1574,23 +1574,35 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   // 播放报警音乐 - 优化版本（支持自定义铃声）
   Future<void> _playAlarmMusic() async {
     try {
-      // iOS: 先通过原生代码强制切换到扬声器播放模式
+      // iOS: 使用原生AVAudioPlayer播放，确保息屏时也能播放
       if (Platform.isIOS) {
         try {
-          await _screenWakeChannel.invokeMethod('configureAudioForPlayback');
-          print('iOS: 已切换到扬声器播放模式');
+          // 检查是否为自定义铃声
+          if (_isCustomRingtone(_selectedMusic)) {
+            final customFilePath = _customMusicFiles[_selectedMusic];
+            if (customFilePath != null) {
+              await _screenWakeChannel.invokeMethod('playAlarmAudio', {'filePath': customFilePath});
+              print('iOS原生播放自定义铃声: $_selectedMusic');
+            } else {
+              await _screenWakeChannel.invokeMethod('playAlarmAudio');
+              print('iOS原生播放默认铃声');
+            }
+          } else {
+            // 内置铃声使用默认播放
+            await _screenWakeChannel.invokeMethod('playAlarmAudio');
+            print('iOS原生播放默认铃声');
+          }
+          return; // iOS使用原生播放，直接返回
         } catch (e) {
-          print('iOS音频模式切换失败: $e');
+          print('iOS原生音频播放失败: $e');
+          // 失败时回退到Flutter播放
         }
       }
       
+      // Android或iOS回退：使用Flutter audioplayers
       await _audioPlayer.stop();
       // 设置最大音量
       await _audioPlayer.setVolume(1.0);
-      // iOS: 设置播放模式为媒体音量（而非通话音量）
-      if (Platform.isIOS) {
-        await _audioPlayer.setPlayerMode(audio.PlayerMode.mediaPlayer);
-      }
       await _audioPlayer.setReleaseMode(audio.ReleaseMode.loop);
       
       bool success = false;
@@ -1642,6 +1654,17 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   // 停止报警
   Future<void> _stopAlarm() async {
     await _audioPlayer.stop();
+    
+    // iOS: 停止原生音频播放
+    if (Platform.isIOS) {
+      try {
+        await _screenWakeChannel.invokeMethod('stopAlarmAudio');
+        print('iOS原生音频已停止');
+      } catch (e) {
+        print('停止iOS原生音频失败: $e');
+      }
+    }
+    
     await _cancelNotification(); // 取消通知
     await _releaseScreenWakeLock(); // 释放屏幕唤醒锁
     if (mounted) {

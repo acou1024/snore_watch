@@ -8,6 +8,8 @@ import AudioToolbox
 @objc class AppDelegate: FlutterAppDelegate {
     private var methodChannel: FlutterMethodChannel?
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
+    private var audioPlayer: AVAudioPlayer?
+    private var systemSoundTimer: Timer?
 
     override func application(
         _ application: UIApplication,
@@ -67,6 +69,17 @@ import AudioToolbox
                 result(true)
             case "configureAudioForRecording":
                 self?.configureAudioSessionForRecording()
+                result(true)
+            case "playAlarmAudio":
+                if let args = call.arguments as? [String: Any],
+                   let filePath = args["filePath"] as? String {
+                    self?.playAlarmAudio(filePath: filePath)
+                } else {
+                    self?.playDefaultAlarmAudio()
+                }
+                result(true)
+            case "stopAlarmAudio":
+                self?.stopAlarmAudio()
                 result(true)
             default:
                 result(FlutterMethodNotImplemented)
@@ -210,6 +223,45 @@ import AudioToolbox
         } catch {
             print("录音音频会话配置失败: \(error)")
         }
+    }
+    
+    // 播放指定路径的音频文件
+    private func playAlarmAudio(filePath: String) {
+        configureAudioSessionForPlayback()
+        let url = URL(fileURLWithPath: filePath)
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.numberOfLoops = -1
+            audioPlayer?.volume = 1.0
+            audioPlayer?.prepareToPlay()
+            audioPlayer?.play()
+            print("原生播放音频: \(filePath)")
+        } catch {
+            print("原生播放音频失败: \(error)")
+            playDefaultAlarmAudio()
+        }
+    }
+    
+    // 播放默认报警音频
+    private func playDefaultAlarmAudio() {
+        configureAudioSessionForPlayback()
+        // 使用系统声音循环播放
+        print("使用系统声音作为备用")
+        AudioServicesPlaySystemSound(1005)
+        systemSoundTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+            AudioServicesPlaySystemSound(1005)
+            self?.vibrate()
+        }
+    }
+    
+    // 停止音频播放
+    private func stopAlarmAudio() {
+        audioPlayer?.stop()
+        audioPlayer = nil
+        systemSoundTimer?.invalidate()
+        systemSoundTimer = nil
+        endBackgroundTask()
+        print("原生停止音频播放")
     }
     
     override func userNotificationCenter(
