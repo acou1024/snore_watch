@@ -1510,18 +1510,13 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   // 播放报警音乐 - 优化版本（支持自定义铃声）
   Future<void> _playAlarmMusic() async {
     try {
-      // iOS: 切换到播放模式以获得最大音量
-      if (Platform.isIOS) {
-        try {
-          await _screenWakeChannel.invokeMethod('configureAudioForPlayback');
-        } catch (e) {
-          print('iOS音频模式切换失败: $e');
-        }
-      }
-      
       await _audioPlayer.stop();
       // 设置最大音量
       await _audioPlayer.setVolume(1.0);
+      // iOS: 设置播放模式为媒体音量（而非通话音量）
+      if (Platform.isIOS) {
+        await _audioPlayer.setPlayerMode(audio.PlayerMode.mediaPlayer);
+      }
       await _audioPlayer.setReleaseMode(audio.ReleaseMode.loop);
       
       bool success = false;
