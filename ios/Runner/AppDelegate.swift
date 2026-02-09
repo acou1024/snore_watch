@@ -82,15 +82,10 @@ import AudioToolbox
         }
         center.delegate = self
         
-        // 2. 申请麦克风权限
+        // 2. 申请麦克风权限（不在这里配置音频会话，避免影响其他应用）
         AVAudioSession.sharedInstance().requestRecordPermission { granted in
             print("麦克风权限: \(granted)")
-            if granted {
-                // 权限获取后配置音频会话
-                DispatchQueue.main.async { [weak self] in
-                    self?.configureAudioSession()
-                }
-            }
+            // 不再自动配置音频会话，等到实际需要录音时再配置
         }
     }
     

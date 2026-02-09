@@ -1154,6 +1154,16 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
         });
       }
       
+      // iOS: 切换到录音模式
+      if (Platform.isIOS) {
+        try {
+          await _screenWakeChannel.invokeMethod('configureAudioForRecording');
+          print('iOS: 已切换到录音模式');
+        } catch (e) {
+          print('iOS录音模式切换失败: $e');
+        }
+      }
+      
       final dir = await getApplicationDocumentsDirectory();
       final recordingsDir = Directory('${dir.path}/snore_recordings');
       if (!await recordingsDir.exists()) {
