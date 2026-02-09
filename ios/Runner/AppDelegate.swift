@@ -7,6 +7,7 @@ import AudioToolbox
 @main
 @objc class AppDelegate: FlutterAppDelegate {
     private var methodChannel: FlutterMethodChannel?
+    private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 
     override func application(
         _ application: UIApplication,
@@ -162,8 +163,38 @@ import AudioToolbox
             // 强制使用扬声器输出
             try audioSession.overrideOutputAudioPort(.speaker)
             print("已切换到扬声器播放模式（支持后台）")
+            
+            // 开始后台任务，防止应用被挂起
+            startBackgroundTask()
         } catch {
             print("播放音频会话配置失败: \(error)")
+        }
+    }
+    
+    private func startBackgroundTask() {
+        // 结束之前的后台任务（如果有）
+        if backgroundTask != .invalid {
+            UIApplication.shared.endBackgroundTask(backgroundTask)
+            backgroundTask = .invalid
+        }
+        
+        // 开始新的后台任务
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "SnoreWatchAlarm") { [weak self] in
+            // 后台任务即将过期时的处理
+            print("后台任务即将过期")
+            if let task = self?.backgroundTask, task != .invalid {
+                UIApplication.shared.endBackgroundTask(task)
+                self?.backgroundTask = .invalid
+            }
+        }
+        print("已开始后台任务: \(backgroundTask)")
+    }
+    
+    private func endBackgroundTask() {
+        if backgroundTask != .invalid {
+            UIApplication.shared.endBackgroundTask(backgroundTask)
+            backgroundTask = .invalid
+            print("已结束后台任务")
         }
     }
     
