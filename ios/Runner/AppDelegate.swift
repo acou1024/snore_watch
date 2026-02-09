@@ -156,12 +156,12 @@ import AudioToolbox
     private func configureAudioSessionForPlayback() {
         do {
             let audioSession = AVAudioSession.sharedInstance()
-            // 使用纯播放模式，获得最大音量
-            try audioSession.setCategory(.playback, mode: .default, options: [.duckOthers])
-            try audioSession.setActive(true)
+            // 使用纯播放模式，无选项以确保后台播放正常工作
+            try audioSession.setCategory(.playback, mode: .default, options: [])
+            try audioSession.setActive(true, options: [])
             // 强制使用扬声器输出
             try audioSession.overrideOutputAudioPort(.speaker)
-            print("已切换到扬声器播放模式")
+            print("已切换到扬声器播放模式（支持后台）")
         } catch {
             print("播放音频会话配置失败: \(error)")
         }
