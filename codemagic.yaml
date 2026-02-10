@@ -1,14 +1,16 @@
 workflows:
   ios-workflow:
-    name: iOS Build
+    name: iOS App Store Build
     max_build_duration: 60
+    integrations:
+      app_store_connect: Codemagic
     environment:
       flutter: stable
       xcode: latest
       cocoapods: default
       ios_signing:
-        distribution_type: ad_hoc  # 或 app_store
-        bundle_identifier: com.example.sleptWell  # 你的 Bundle ID
+        distribution_type: app_store
+        bundle_identifier: com.songshike.snorewatch
     scripts:
       - name: Get Flutter packages
         script: flutter packages pub get
@@ -19,7 +21,7 @@ workflows:
       - name: Set up code signing
         script: |
           keychain initialize
-          app-store-connect fetch-signing-files $(BUNDLE_ID) --type IOS_APP_ADHOC --create
+          app-store-connect fetch-signing-files com.songshike.snorewatch --type IOS_APP_STORE --create
           keychain add-certificates
           xcode-project use-profiles
       - name: Build iOS
@@ -31,10 +33,14 @@ workflows:
     publishing:
       email:
         recipients:
-          - 2066575268@qq.com  # 你的邮箱
+          - 2066575268@qq.com
         notify:
           success: true
           failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false
+        submit_to_app_store: false
 
   android-workflow:
     name: Android Build
