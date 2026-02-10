@@ -65,7 +65,10 @@ flutter_launcher_icons:
   remove_alpha_ios: true
 
 flutter_native_splash:
-  color: "#0D1B2A"
-  image: "image/icon.png"
+  background_image: "image/开屏页.png"
+  background_image_dark: "image/开屏页.png"
   ios: true
   android: true
+  android_12:
+    image: "image/icon.png"
+    icon_background_color: "#0D1B2A"
