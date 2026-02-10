@@ -61,12 +61,11 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "image/app-icon--sleeping-moon-with-sound-waves--dark-blu.png"
+  image_path: "image/icon.png"
   remove_alpha_ios: true
-  background_color_ios: "#1a5a6e"
 
 flutter_native_splash:
   color: "#0D1B2A"
-  image: "image/app-icon--sleeping-moon-with-sound-waves--dark-blu.png"
+  image: "image/icon.png"
   ios: true
   android: true
