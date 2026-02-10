@@ -61,6 +61,9 @@ import AudioToolbox
             case "cancelNotification":
                 self?.cancelNotification()
                 result(true)
+            case "clearBadge":
+                self?.clearBadge()
+                result(true)
             case "vibrate":
                 self?.vibrate()
                 result(true)
@@ -146,6 +149,12 @@ import AudioToolbox
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
         UIApplication.shared.applicationIconBadgeNumber = 0
+    }
+    
+    private func clearBadge() {
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        print("iOS角标已清除")
     }
     
     private func vibrate() {

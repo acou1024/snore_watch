@@ -288,7 +288,20 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     // 新增：延迟检查权限并显示提示
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _requestAllPermissionsOnStartup();
+      _clearBadgeOnStartup(); // 启动时清除角标
     });
+  }
+  
+  // 新增：启动时清除角标
+  Future<void> _clearBadgeOnStartup() async {
+    if (Platform.isIOS) {
+      try {
+        await _screenWakeChannel.invokeMethod('clearBadge');
+        print('启动时清除iOS角标');
+      } catch (e) {
+        print('启动时清除角标失败: $e');
+      }
+    }
   }
   
   // 新增：设置原生端权限变化监听
@@ -388,9 +401,20 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     );
   }
   
-  // 新增：取消通知
+  // 新增：取消通知并清除角标
   Future<void> _cancelNotification() async {
     await _flutterLocalNotificationsPlugin.cancel(0);
+    await _flutterLocalNotificationsPlugin.cancelAll(); // 取消所有通知
+    
+    // iOS清除角标 - 通过原生通道
+    if (Platform.isIOS) {
+      try {
+        await _screenWakeChannel.invokeMethod('clearBadge');
+        print('iOS角标已清除');
+      } catch (e) {
+        print('清除iOS角标失败: $e');
+      }
+    }
   }
   
   // 新增：设置返回键处理器
