@@ -67,9 +67,6 @@
 		<array>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).background-task</string>
 		</array>
-		<!-- 4. 防止iOS在后台暂停应用（可选） -->
-		<key>UIApplicationExitsOnSuspend</key>
-		<false/>
 		<!-- 5. 请求始终使用位置权限的说明（如果未来需要） -->
 		<!-- 注意：目前我们不需要位置权限，但保留这个注释以便将来使用 -->
 		<!--
