@@ -21,7 +21,7 @@ workflows:
       - name: Set up code signing
         script: |
           keychain initialize
-          app-store-connect fetch-signing-files com.songshike.snorewatch --type IOS_APP_STORE --create
+          app-store-connect fetch-signing-files com.songshike.snorewatch --type IOS_APP_STORE
           keychain add-certificates
           xcode-project use-profiles
       - name: Build iOS
