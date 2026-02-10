@@ -1184,13 +1184,13 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     
     // 关键修复：确保录音器已打开（因为上次守护结束时可能已关闭）
     try {
-      if (!_soundRecorder.isOpen()) {
-        await _soundRecorder.openRecorder();
-        await _soundRecorder.setSubscriptionDuration(const Duration(milliseconds: 10));
-        print('录音器重新打开成功');
-      }
+      // FlutterSoundRecorder使用isStopped属性检查状态
+      // 如果录音器已关闭，需要重新打开
+      await _soundRecorder.openRecorder();
+      await _soundRecorder.setSubscriptionDuration(const Duration(milliseconds: 10));
+      print('录音器已打开/重新打开');
     } catch (e) {
-      print('重新打开录音器失败: $e');
+      print('打开录音器失败: $e');
     }
     
     if (mounted) {
