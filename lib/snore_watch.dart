@@ -251,7 +251,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   late FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin;
   
   // 新增：原生屏幕唤醒通道
-  static const MethodChannel _screenWakeChannel = MethodChannel('com.example.slept_well/screen_wake');
+  static const MethodChannel _screenWakeChannel = MethodChannel('com.songshike.snorewatch/screen_wake');
   
   // 权限状态缓存（用于权限设置页面刷新）
   Map<dynamic, dynamic>? _cachedPermissions;

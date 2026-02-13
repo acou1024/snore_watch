@@ -1,5 +1,5 @@
-name: slept_well
-description: "Snore Watch - 智能睡眠守护应用"
+name: snore_watch
+description: "鼾声守望者 - 智能睡眠守护应用"
 publish_to: 'none'
 version: 2.0.0+1
 

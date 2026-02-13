@@ -34,7 +34,7 @@ import AudioToolbox
         }
         
         methodChannel = FlutterMethodChannel(
-            name: "com.example.slept_well/screen_wake",
+            name: "com.songshike.snorewatch/screen_wake",
             binaryMessenger: controller.binaryMessenger
         )
         
