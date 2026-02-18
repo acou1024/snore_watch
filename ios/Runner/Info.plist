@@ -75,6 +75,11 @@
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>需要在后台持续监测打鼾</string>
     -->
+		<!-- 7. HealthKit权限（用于同步睡眠数据到健康App） -->
+		<key>NSHealthShareUsageDescription</key>
+		<string>鼾声守望者需要读取您的健康数据以展示睡眠分析</string>
+		<key>NSHealthUpdateUsageDescription</key>
+		<string>鼾声守望者需要将睡眠监测数据保存到健康App中</string>
 		<!-- === iOS 权限配置结束 === -->
 		<key>UIStatusBarHidden</key>
 		<false/>

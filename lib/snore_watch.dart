@@ -2199,8 +2199,41 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     try {
       await SleepStorageService.instance.saveSleepRecord(record);
       print('睡眠记录已保存: ${record.durationFormatted}, 打鼾${record.snoreCount}次, 评分${record.sleepScore}');
+      
+      // 同步到iOS HealthKit
+      if (Platform.isIOS) {
+        await _syncToHealthKit(record);
+      }
     } catch (e) {
       print('保存睡眠记录失败: $e');
+    }
+  }
+  
+  // 同步睡眠数据到iOS HealthKit
+  Future<void> _syncToHealthKit(SleepRecord record) async {
+    try {
+      // 检查HealthKit是否可用
+      final isAvailable = await _screenWakeChannel.invokeMethod<bool>('isHealthKitAvailable') ?? false;
+      if (!isAvailable) {
+        print('HealthKit不可用');
+        return;
+      }
+      
+      // 请求权限
+      final granted = await _screenWakeChannel.invokeMethod<bool>('requestHealthKitPermission') ?? false;
+      if (!granted) {
+        print('HealthKit权限未授予');
+        return;
+      }
+      
+      // 保存睡眠数据
+      await _screenWakeChannel.invokeMethod('saveHealthKitSleepData', {
+        'startTime': record.startTime.millisecondsSinceEpoch.toDouble(),
+        'endTime': record.endTime.millisecondsSinceEpoch.toDouble(),
+      });
+      print('睡眠数据已同步到HealthKit');
+    } catch (e) {
+      print('同步HealthKit失败: $e');
     }
   }
   

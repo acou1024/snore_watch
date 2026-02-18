@@ -3,6 +3,7 @@ import Flutter
 import AVFoundation
 import UserNotifications
 import AudioToolbox
+import HealthKit
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -10,6 +11,7 @@ import AudioToolbox
     private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
     private var audioPlayer: AVAudioPlayer?
     private var systemSoundTimer: Timer?
+    private let healthStore = HKHealthStore()
 
     override func application(
         _ application: UIApplication,
@@ -84,6 +86,16 @@ import AudioToolbox
             case "stopAlarmAudio":
                 self?.stopAlarmAudio()
                 result(true)
+            case "requestHealthKitPermission":
+                self?.requestHealthKitPermission(result: result)
+            case "saveHealthKitSleepData":
+                if let args = call.arguments as? [String: Any] {
+                    self?.saveHealthKitSleepData(args: args, result: result)
+                } else {
+                    result(FlutterError(code: "INVALID_ARGS", message: "Invalid arguments", details: nil))
+                }
+            case "isHealthKitAvailable":
+                result(HKHealthStore.isHealthDataAvailable())
             default:
                 result(FlutterMethodNotImplemented)
             }
@@ -260,6 +272,76 @@ import AudioToolbox
         systemSoundTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
             AudioServicesPlaySystemSound(1005)
             self?.vibrate()
+        }
+    }
+    
+    // MARK: - HealthKit
+    
+    private func requestHealthKitPermission(result: @escaping FlutterResult) {
+        guard HKHealthStore.isHealthDataAvailable() else {
+            result(false)
+            return
+        }
+        
+        let sleepType = HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!
+        let typesToWrite: Set<HKSampleType> = [sleepType]
+        let typesToRead: Set<HKObjectType> = [sleepType]
+        
+        healthStore.requestAuthorization(toShare: typesToWrite, read: typesToRead) { success, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("HealthKit授权失败: \(error)")
+                }
+                result(success)
+            }
+        }
+    }
+    
+    private func saveHealthKitSleepData(args: [String: Any], result: @escaping FlutterResult) {
+        guard HKHealthStore.isHealthDataAvailable() else {
+            result(FlutterError(code: "UNAVAILABLE", message: "HealthKit not available", details: nil))
+            return
+        }
+        
+        guard let startTimeMs = args["startTime"] as? Double,
+              let endTimeMs = args["endTime"] as? Double else {
+            result(FlutterError(code: "INVALID_ARGS", message: "Missing startTime or endTime", details: nil))
+            return
+        }
+        
+        let startDate = Date(timeIntervalSince1970: startTimeMs / 1000.0)
+        let endDate = Date(timeIntervalSince1970: endTimeMs / 1000.0)
+        
+        guard let sleepType = HKObjectType.categoryType(forIdentifier: .sleepAnalysis) else {
+            result(FlutterError(code: "TYPE_ERROR", message: "Cannot create sleep type", details: nil))
+            return
+        }
+        
+        // 保存为 asleepUnspecified（iOS 16+）或 inBed
+        let value: Int
+        if #available(iOS 16.0, *) {
+            value = HKCategoryValueSleepAnalysis.asleepUnspecified.rawValue
+        } else {
+            value = HKCategoryValueSleepAnalysis.inBed.rawValue
+        }
+        
+        let sample = HKCategorySample(
+            type: sleepType,
+            value: value,
+            start: startDate,
+            end: endDate
+        )
+        
+        healthStore.save(sample) { success, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("HealthKit保存睡眠数据失败: \(error)")
+                    result(FlutterError(code: "SAVE_ERROR", message: error.localizedDescription, details: nil))
+                } else {
+                    print("HealthKit睡眠数据已保存: \(startDate) - \(endDate)")
+                    result(success)
+                }
+            }
         }
     }
     
