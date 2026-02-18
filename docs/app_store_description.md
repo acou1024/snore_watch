@@ -3,131 +3,141 @@
 ## 中文版本
 
 ### 应用名称
-鼾声守望者 - 智能睡眠监测
+鼾声守望者 - 智能止鼾助手
 
 ### 副标题
-监测打鼾，守护睡眠健康
+打断鼾声，不只是记录
 
 ### 描述
-鼾声守望者是一款专业的睡眠监测应用，帮助您了解和改善睡眠质量。
+别的应用只是记录你打鼾了多少次——鼾声守望者会在你打鼾时主动干预，用渐进式轻柔音乐温和打断鼾声，帮你和枕边人都睡个好觉。
 
-**主要功能：**
+这不是又一个睡眠记录器。这是一个真正帮你解决打鼾问题的主动守护者。
 
-🎯 **智能打鼾检测**
-- 实时监测环境声音分贝
-- 智能识别打鼾模式
-- 可调节灵敏度阈值（40-80dB）
+**核心能力：主动止鼾**
 
-🎵 **温和叫醒功能**
-- 检测到持续打鼾时播放轻柔音乐
-- 19种内置自然音和轻音乐
-- 支持导入自定义铃声
-- 音量渐进式增加，温和唤醒
+🛡️ **智能干预，而非被动记录**
+- 检测到持续打鼾时，自动播放渐进式音乐温和唤醒
+- 音量从低到高逐步提升，不会惊醒你，只是轻轻打断鼾声
+- 19种内置自然音和轻音乐，支持导入你喜欢的铃声
+- 你也可以选择"仅记录"模式，只监测不干预
 
-📊 **睡眠记录**
-- 自动保存打鼾录音
-- 查看打鼾次数统计
-- 睡眠质量评估报告
+📊 **专业级睡眠分析**
+- 鼾声严重度分级（轻微/中度/严重）
+- 鼾声时间线可视化，一眼看清整晚打鼾分布
+- 基于严重度的睡眠质量评分（0-100分）
+- 个性化建议：根据打鼾时段和严重度给出针对性改善方案
 
-⚙️ **灵活设置**
-- 两种监测模式：仅记录 / 记录+叫醒
-- 1-12小时守护时长可选
-- 中英文界面切换
+🎙️ **完整录音证据**
+- 自动保存每次打鼾的录音片段
+- 独立录音库，随时回放
+- 数据导出CSV + 精美报告图片分享
 
-**隐私保护：**
-- 所有数据仅存储在本地设备
+📈 **长期趋势追踪**
+- 7天/30天打鼾趋势图
+- 历史记录详情查看
+- iOS健康App数据同步（HealthKit）
+
+🔒 **隐私至上**
+- 所有数据仅存储在你的设备上
 - 不上传任何个人信息
-- 不需要网络连接即可使用
+- 无需网络连接即可使用
 
-立即下载，开始守护您的睡眠健康！
+今晚就试试，让鼾声守望者帮你打断鼾声，而不只是记录它。
 
 ### 关键词
-睡眠,打鼾,鼾声,监测,健康,睡眠质量,打呼噜,睡眠记录,白噪音,助眠
+止鼾,打鼾,鼾声,睡眠监测,健康,睡眠质量,打呼噜,睡眠记录,止鼾助手,睡眠改善
 
 ### 新功能（版本更新说明）
-- 新增监测模式选择（仅记录/记录+叫醒）
-- 支持导入自定义叫醒铃声
-- 新增中英文界面切换
-- 优化守护结束统计报告
-- 扩展守护时长选项（1-12小时）
+- 全新鼾声时间线可视化，一眼看清整晚打鼾分布
+- 鼾声严重度分级（轻微/中度/严重）
+- 基于严重度的专业睡眠评分算法
+- 个性化睡眠建议（根据打鼾时段智能分析）
+- 独立录音库页面，支持回放和管理
+- 数据导出（CSV表格 + 报告图片分享）
+- iOS健康App数据同步（HealthKit集成）
 
 ---
 
 ## English Version
 
 ### App Name
-Snore Watch - Smart Sleep Monitor
+Snore Watch - Active Snore Stopper
 
 ### Subtitle
-Monitor snoring, protect your sleep health
+Stop snoring, not just track it
 
 ### Description
-Snore Watch is a professional sleep monitoring app that helps you understand and improve your sleep quality.
+Other apps just tell you how many times you snored. Snore Watch actively intervenes — playing gentle, progressive music to break the snoring cycle, helping both you and your partner sleep better.
 
-**Key Features:**
+This isn't another sleep tracker. It's an active guardian that actually helps solve your snoring problem.
 
-🎯 **Smart Snore Detection**
-- Real-time ambient sound monitoring
-- Intelligent snoring pattern recognition
-- Adjustable sensitivity threshold (40-80dB)
+**Core Capability: Active Snore Intervention**
 
-🎵 **Gentle Wake-up Function**
-- Plays soft music when continuous snoring is detected
-- 19 built-in nature sounds and light music
-- Support for custom ringtone import
-- Gradual volume increase for gentle awakening
+🛡️ **Smart Intervention, Not Passive Recording**
+- Automatically plays progressive music when continuous snoring is detected
+- Volume gradually increases from low to high — gently interrupts snoring without startling you
+- 19 built-in nature sounds and light music, plus custom ringtone import
+- "Record Only" mode available if you prefer monitoring without intervention
 
-📊 **Sleep Records**
-- Automatic snoring recording
-- View snoring count statistics
-- Sleep quality assessment report
+📊 **Professional Sleep Analysis**
+- Snore severity grading (Mild / Moderate / Severe)
+- Snore timeline visualization — see your entire night's snoring pattern at a glance
+- Severity-based sleep quality score (0-100)
+- Personalized advice based on snoring timing and severity
 
-⚙️ **Flexible Settings**
-- Two monitoring modes: Record Only / Record & Wake
-- 1-12 hours guard duration options
-- Chinese/English interface switching
+🎙️ **Complete Recording Evidence**
+- Automatically saves audio clips of each snoring event
+- Dedicated recording library with instant playback
+- Export data as CSV + share beautiful report images
 
-**Privacy Protection:**
-- All data stored locally on device only
+📈 **Long-term Trend Tracking**
+- 7-day / 30-day snoring trend charts
+- Detailed history records
+- iOS Health app sync (HealthKit)
+
+🔒 **Privacy First**
+- All data stored only on your device
 - No personal information uploaded
 - Works without internet connection
 
-Download now and start protecting your sleep health!
+Try it tonight — let Snore Watch stop your snoring, not just record it.
 
 ### Keywords
-sleep,snoring,snore,monitor,health,sleep quality,sleep tracking,white noise,sleep aid
+stop snoring,snore,sleep monitor,health,sleep quality,snore stopper,sleep tracking,sleep aid,anti snore
 
 ### What's New (Version Update Notes)
-- Added monitoring mode selection (Record Only / Record & Wake)
-- Support for custom wake-up ringtone import
-- Added Chinese/English interface switching
-- Optimized guard completion statistics report
-- Extended guard duration options (1-12 hours)
+- New snore timeline visualization — see your entire night at a glance
+- Snore severity grading (Mild / Moderate / Severe)
+- Professional severity-based sleep scoring algorithm
+- Personalized sleep advice based on snoring pattern analysis
+- Dedicated recording library with playback and management
+- Data export (CSV spreadsheet + report image sharing)
+- iOS Health app data sync (HealthKit integration)
 
 ---
 
 ## App Store 截图文案 / Screenshot Captions
 
 ### 中文
-1. 一键开始睡眠守护
-2. 智能检测打鼾模式
-3. 温和音乐唤醒
-4. 详细睡眠报告
-5. 19种自然音可选
+1. 检测到打鼾，主动温和干预
+2. 鼾声时间线，一眼看清整晚
+3. 严重度分级，专业睡眠评分
+4. 个性化建议，针对性改善
+5. 录音库 + 数据导出分享
 
 ### English
-1. One-tap sleep guard start
-2. Smart snoring detection
-3. Gentle music wake-up
-4. Detailed sleep report
-5. 19 nature sounds available
+1. Detects snoring, actively intervenes
+2. Snore timeline — your whole night at a glance
+3. Severity grading & professional sleep score
+4. Personalized advice for targeted improvement
+5. Recording library + data export & sharing
 
 ---
 
 ## 分类建议 / Category Suggestions
 
 **主分类 / Primary:** 健康健美 / Health & Fitness
-**次分类 / Secondary:** 生活 / Lifestyle
+**次分类 / Secondary:** 医疗 / Medical
 
 ## 年龄分级 / Age Rating
 4+ (无限制内容 / No restricted content)
