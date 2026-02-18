@@ -1877,11 +1877,11 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     _guardTimer?.cancel();
     _stopNoiseMonitoring();
     _snoreAnalysisTimer?.cancel();
-    await _stopTemporaryRecording(saveToHistory: false); // 停止时不保存
+    await _stopTemporaryRecording(saveToHistory: false);
     await _stopAlarm();
-    await _cancelNotification(); // 取消通知
+    await _cancelNotification();
     
-    // 关键修复：守护结束后关闭录音器，释放麦克风
+    // 关闭录音器，释放麦克风
     try {
       await _soundRecorder.closeRecorder();
       print('守护结束，录音器已关闭');
@@ -1889,15 +1889,19 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
       print('关闭录音器失败: $e');
     }
     
-    // 新增：确保在守护结束时禁用屏幕唤醒
     await WakelockPlus.disable();
     
+    // 保存睡眠记录（必须在清空数据之前）
+    await _saveSleepRecord();
+    
+    // 显示守护结束总结弹窗（必须在清空数据之前）
+    _showGuardSummaryDialog();
+    
+    // 弹窗显示后再重置状态
     if (mounted) {
       setState(() {
         _isRunning = false;
         _pageState = 0;
-        _recentDbValues.clear();
-        _snoreCountInCurrentMinute = 0;
         _isAlarming = false;
         _isInRecordingCycle = false;
         _isPlayingRecording = false;
@@ -1905,13 +1909,10 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
       });
     }
     
+    _recentDbValues.clear();
+    _snoreCountInCurrentMinute = 0;
+    
     await _loadExistingRecordings();
-    
-    // 保存睡眠记录到统计
-    await _saveSleepRecord();
-    
-    // 显示美化的守护结束总结弹窗
-    _showGuardSummaryDialog();
     
     print('=== 守护结束 ===');
   }

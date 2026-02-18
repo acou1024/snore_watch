@@ -79,26 +79,19 @@ class _RecordingLibraryPageState extends State<RecordingLibraryPage> {
       final recordings = <_RecordingItem>[];
       
       for (final file in files) {
-        if (file is File && file.path.endsWith('.aac')) {
+        if (file is File && _isAudioFile(file.path)) {
           final stat = await file.stat();
           final fileName = file.path.split('/').last.split('\\').last;
           
           // 从文件名解析日期时间
           DateTime? dateTime;
           try {
-            // 文件名格式: snore_20260218_143000.aac
-            final parts = fileName.replaceAll('snore_', '').replaceAll('.aac', '').split('_');
-            if (parts.length >= 2) {
-              final datePart = parts[0];
-              final timePart = parts[1];
-              dateTime = DateTime(
-                int.parse(datePart.substring(0, 4)),
-                int.parse(datePart.substring(4, 6)),
-                int.parse(datePart.substring(6, 8)),
-                int.parse(timePart.substring(0, 2)),
-                int.parse(timePart.substring(2, 4)),
-                int.parse(timePart.substring(4, 6)),
-              );
+            // 文件名格式: snore_1708234567890.m4a (毫秒时间戳)
+            final nameWithoutExt = fileName.split('.').first;
+            final tsStr = nameWithoutExt.replaceAll('snore_', '').replaceAll('_pcm', '');
+            final ts = int.tryParse(tsStr);
+            if (ts != null) {
+              dateTime = DateTime.fromMillisecondsSinceEpoch(ts);
             }
           } catch (_) {}
           
@@ -255,6 +248,12 @@ class _RecordingLibraryPageState extends State<RecordingLibraryPage> {
     final minutes = d.inMinutes;
     final seconds = d.inSeconds % 60;
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  bool _isAudioFile(String path) {
+    final ext = path.toLowerCase();
+    return ext.endsWith('.m4a') || ext.endsWith('.wav') || 
+           ext.endsWith('.aac') || ext.endsWith('.ogg');
   }
 
   String _formatFileSize(int bytes) {
