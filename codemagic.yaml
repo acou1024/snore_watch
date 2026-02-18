@@ -1,5 +1,43 @@
 workflows:
-  ios-workflow:
+  # Ad Hoc 构建：生成可直接安装到测试设备的 IPA
+  ios-adhoc:
+    name: iOS Ad Hoc Build
+    max_build_duration: 60
+    integrations:
+      app_store_connect: 鼾声守望者
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Get Flutter packages
+        script: flutter packages pub get
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios
+          pod install
+      - name: Set up code signing (Ad Hoc)
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files $(xcode-project detect-bundle-id) --type IOS_APP_ADHOC --create
+          keychain add-certificates
+          xcode-project use-profiles
+      - name: Build iOS (Ad Hoc)
+        script: |
+          flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - 2066575268@qq.com
+        notify:
+          success: true
+          failure: true
+
+  # App Store 发布构建
+  ios-appstore:
     name: iOS App Store Build
     max_build_duration: 60
     integrations:
@@ -15,13 +53,13 @@ workflows:
         script: |
           cd ios
           pod install
-      - name: Set up code signing
+      - name: Set up code signing (App Store)
         script: |
           keychain initialize
           app-store-connect fetch-signing-files $(xcode-project detect-bundle-id) --type IOS_APP_STORE --create
           keychain add-certificates
           xcode-project use-profiles
-      - name: Build iOS
+      - name: Build iOS (App Store)
         script: |
           flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
     artifacts:
