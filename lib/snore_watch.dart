@@ -14,6 +14,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart'; /
 import 'package:file_picker/file_picker.dart'; // 新增：文件选择器
 import 'package:shared_preferences/shared_preferences.dart'; // 新增：本地存储
 import 'l10n/app_localizations.dart'; // 多语言支持
+import 'models/sleep_record.dart'; // 睡眠记录模型
+import 'services/sleep_storage_service.dart'; // 睡眠数据存储服务
+import 'pages/sleep_stats_page.dart'; // 睡眠统计页面
 
 void main() {
   runApp(const SnoreWatchApp());
@@ -1884,6 +1887,9 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     
     await _loadExistingRecordings();
     
+    // 保存睡眠记录到统计
+    await _saveSleepRecord();
+    
     // 显示美化的守护结束总结弹窗
     _showGuardSummaryDialog();
     
@@ -2159,6 +2165,51 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     );
   }
   
+  // 保存睡眠记录到统计
+  Future<void> _saveSleepRecord() async {
+    if (_guardStartTime == null) return;
+    
+    final endTime = DateTime.now();
+    final durationMinutes = endTime.difference(_guardStartTime!).inMinutes;
+    
+    // 只保存超过1分钟的记录
+    if (durationMinutes < 1) return;
+    
+    // 计算平均分贝
+    double avgDb = 0.0;
+    double maxDb = 0.0;
+    if (_recentDbValues.isNotEmpty) {
+      avgDb = _recentDbValues.reduce((a, b) => a + b) / _recentDbValues.length;
+      maxDb = _recentDbValues.reduce((a, b) => a > b ? a : b);
+    }
+    
+    final record = SleepRecord(
+      id: '${_guardStartTime!.millisecondsSinceEpoch}',
+      startTime: _guardStartTime!,
+      endTime: endTime,
+      snoreCount: _totalSnoreEvents,
+      recordingCount: _currentSessionRecordingCount,
+      monitorMode: _monitorMode,
+      avgDb: avgDb,
+      maxDb: maxDb,
+    );
+    
+    try {
+      await SleepStorageService.instance.saveSleepRecord(record);
+      print('睡眠记录已保存: ${record.durationFormatted}, 打鼾${record.snoreCount}次, 评分${record.sleepScore}');
+    } catch (e) {
+      print('保存睡眠记录失败: $e');
+    }
+  }
+  
+  // 打开睡眠统计页面
+  void _openSleepStats() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SleepStatsPage()),
+    );
+  }
+  
   // 格式化剩余时间
   String _formatRemainingTime() {
     int hours = _remainingSeconds ~/ 3600;
@@ -2349,6 +2400,30 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
                 style: TextStyle(
                   color: Colors.white54,
                   fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 20),
+              // 睡眠统计入口按钮
+              GestureDetector(
+                onTap: _openSleepStats,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: _cardColor,
+                    borderRadius: BorderRadius.circular(25),
+                    border: Border.all(color: _primaryColor.withOpacity(0.3)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.bar_chart_rounded, color: _primaryColor, size: 20),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppLocalizations.of(context)?.get('view_stats') ?? '查看统计',
+                        style: TextStyle(color: _primaryColor, fontSize: 14, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
