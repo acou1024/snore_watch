@@ -323,7 +323,8 @@ class _SleepStatsPageState extends State<SleepStatsPage> with SingleTickerProvid
           final barHeight = maxSnore > 0 
               ? (stat.totalSnoreCount / maxSnore * chartHeight).clamp(4.0, chartHeight)
               : 4.0;
-          final isToday = stat.date.day == DateTime.now().day;
+          final now = DateTime.now();
+          final isToday = stat.date.year == now.year && stat.date.month == now.month && stat.date.day == now.day;
           
           return Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -507,7 +508,8 @@ class _SleepStatsPageState extends State<SleepStatsPage> with SingleTickerProvid
                 final stat = entry.value;
                 final value = getValue(stat);
                 final barHeight = max > 0 ? (value / max * chartHeight).clamp(4.0, chartHeight) : 4.0;
-                final isToday = stat.date.day == DateTime.now().day;
+                final now = DateTime.now();
+                final isToday = stat.date.year == now.year && stat.date.month == now.month && stat.date.day == now.day;
                 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.end,
