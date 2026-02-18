@@ -17,6 +17,8 @@ import 'l10n/app_localizations.dart'; // 多语言支持
 import 'models/sleep_record.dart'; // 睡眠记录模型
 import 'services/sleep_storage_service.dart'; // 睡眠数据存储服务
 import 'pages/sleep_stats_page.dart'; // 睡眠统计页面
+import 'pages/recording_library_page.dart'; // 录音库页面
+import 'pages/data_export_page.dart'; // 数据导出页面
 
 void main() {
   runApp(const SnoreWatchApp());
@@ -2210,6 +2212,52 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     );
   }
   
+  // 打开录音库页面
+  void _openRecordingLibrary() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const RecordingLibraryPage()),
+    );
+  }
+  
+  // 打开数据导出页面
+  void _openDataExport() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const DataExportPage()),
+    );
+  }
+  
+  // 构建功能入口按钮
+  Widget _buildFeatureButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: _cardColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: _primaryColor.withOpacity(0.3)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: _primaryColor, size: 22),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(color: _primaryColor, fontSize: 11, fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
   // 格式化剩余时间
   String _formatRemainingTime() {
     int hours = _remainingSeconds ~/ 3600;
@@ -2403,28 +2451,28 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
                 ),
               ),
               const SizedBox(height: 20),
-              // 睡眠统计入口按钮
-              GestureDetector(
-                onTap: _openSleepStats,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: _cardColor,
-                    borderRadius: BorderRadius.circular(25),
-                    border: Border.all(color: _primaryColor.withOpacity(0.3)),
+              // 功能入口按钮组
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildFeatureButton(
+                    icon: Icons.bar_chart_rounded,
+                    label: AppLocalizations.of(context)?.get('view_stats') ?? '睡眠统计',
+                    onTap: _openSleepStats,
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.bar_chart_rounded, color: _primaryColor, size: 20),
-                      const SizedBox(width: 8),
-                      Text(
-                        AppLocalizations.of(context)?.get('view_stats') ?? '查看统计',
-                        style: TextStyle(color: _primaryColor, fontSize: 14, fontWeight: FontWeight.w500),
-                      ),
-                    ],
+                  const SizedBox(width: 12),
+                  _buildFeatureButton(
+                    icon: Icons.library_music_rounded,
+                    label: AppLocalizations.of(context)?.get('recording_library') ?? '录音库',
+                    onTap: _openRecordingLibrary,
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  _buildFeatureButton(
+                    icon: Icons.ios_share_rounded,
+                    label: AppLocalizations.of(context)?.get('data_export') ?? '数据导出',
+                    onTap: _openDataExport,
+                  ),
+                ],
               ),
             ],
           ),

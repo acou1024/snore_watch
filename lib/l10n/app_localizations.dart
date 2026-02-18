@@ -192,6 +192,28 @@ class AppLocalizations {
       'advice_poor': '打鼾较为频繁，建议关注睡眠健康。可尝试抬高枕头、减轻体重或咨询医生。',
       'minutes': '分钟',
       'view_stats': '查看统计',
+      
+      // 录音库
+      'recording_library': '录音库',
+      'no_recordings_library': '录音库为空',
+      'no_recordings_library_hint': '开始睡眠监测后，检测到的鼾声录音将保存在这里',
+      'total_recordings': '总录音',
+      'total_size': '总大小',
+      'total_days': '天数',
+      'confirm_delete': '确认删除',
+      'confirm_delete_recording': '确定要删除这条录音吗？',
+      'confirm_delete_all': '确认全部删除',
+      'confirm_delete_all_msg': '确定要删除所有录音吗？此操作不可恢复。',
+      
+      // 数据导出
+      'data_export': '数据导出',
+      'export_csv': '导出CSV数据',
+      'export_csv_desc': '导出所有睡眠数据为CSV表格文件，可在Excel中打开',
+      'share_report': '分享睡眠报告',
+      'share_report_desc': '生成精美的睡眠报告图片，可分享到社交媒体',
+      'report_preview': '报告预览',
+      'no_data_export': '暂无数据可导出\n完成睡眠监测后即可导出',
+      'sleep_report': '睡眠报告',
     },
     'en': {
       // App title
@@ -373,6 +395,28 @@ class AppLocalizations {
       'advice_poor': 'Frequent snoring detected. Consider elevating your pillow, losing weight, or consulting a doctor.',
       'minutes': 'min',
       'view_stats': 'View Stats',
+      
+      // Recording library
+      'recording_library': 'Recordings',
+      'no_recordings_library': 'No Recordings',
+      'no_recordings_library_hint': 'Snore recordings will be saved here after monitoring',
+      'total_recordings': 'Recordings',
+      'total_size': 'Total Size',
+      'total_days': 'Days',
+      'confirm_delete': 'Confirm Delete',
+      'confirm_delete_recording': 'Are you sure you want to delete this recording?',
+      'confirm_delete_all': 'Delete All',
+      'confirm_delete_all_msg': 'Are you sure you want to delete all recordings? This cannot be undone.',
+      
+      // Data export
+      'data_export': 'Export',
+      'export_csv': 'Export CSV Data',
+      'export_csv_desc': 'Export all sleep data as CSV file, can be opened in Excel',
+      'share_report': 'Share Sleep Report',
+      'share_report_desc': 'Generate a beautiful sleep report image to share on social media',
+      'report_preview': 'Report Preview',
+      'no_data_export': 'No data to export\nComplete a sleep session first',
+      'sleep_report': 'Sleep Report',
     },
   };
   

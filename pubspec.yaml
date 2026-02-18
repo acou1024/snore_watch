@@ -42,6 +42,9 @@ dependencies:
   
   # 新增：本地存储（用于保存用户设置）
   shared_preferences: ^2.2.2
+  
+  # 新增：分享功能（用于导出数据和报告）
+  share_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:
