@@ -19,6 +19,7 @@ import 'services/sleep_storage_service.dart'; // 睡眠数据存储服务
 import 'pages/sleep_stats_page.dart'; // 睡眠统计页面
 import 'pages/recording_library_page.dart'; // 录音库页面
 import 'pages/data_export_page.dart'; // 数据导出页面
+import 'widgets/snore_timeline_painter.dart'; // 鼾声时间线
 
 void main() {
   runApp(const SnoreWatchApp());
@@ -203,6 +204,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
   int _totalSnoreEvents = 0; // 整个守护期间的打鼾事件总数
   DateTime? _guardStartTime; // 守护开始时间
   Timer? _snoreAnalysisTimer; // 每分钟分析一次
+  final List<SnoreEvent> _snoreEventsList = []; // 详细打鼾事件列表
   
   // 真实录音相关
   final FlutterSoundRecorder _soundRecorder = FlutterSoundRecorder();
@@ -1207,6 +1209,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
         _recentDbValues.clear();
         _snoreCountInCurrentMinute = 0;
         _totalSnoreEvents = 0; // 重置总打鼾事件计数
+        _snoreEventsList.clear(); // 重置打鼾事件列表
         _guardStartTime = DateTime.now(); // 记录守护开始时间
         _isInRecordingCycle = false;
         _isRecording = false; // 重置录音状态
@@ -1500,7 +1503,22 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
     if (_snoreCountInCurrentMinute >= 8) {
       // 增加总打鼾事件计数
       _totalSnoreEvents++;
-      print('检测到打鼾事件，总计: $_totalSnoreEvents 次');
+      
+      // 记录详细打鼾事件
+      double eventMaxDb = _thresholdDb;
+      if (_recentDbValues.isNotEmpty) {
+        eventMaxDb = _recentDbValues.reduce((a, b) => a > b ? a : b);
+      }
+      final severity = SnoreEvent.calculateSeverity(eventMaxDb, _thresholdDb);
+      _snoreEventsList.add(SnoreEvent(
+        time: DateTime.now(),
+        db: eventMaxDb,
+        durationSeconds: 60,
+        severity: severity,
+        audioPath: _currentRecordingPath,
+      ));
+      
+      print('检测到打鼾事件，总计: $_totalSnoreEvents 次, 严重度: $severity, 峰值: ${eventMaxDb.toStringAsFixed(1)}dB');
       
       // 保存录音（无论哪种模式都保存）
       // 关键修复：检查录音状态或录音路径是否存在
@@ -1957,36 +1975,41 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
             const SizedBox(height: 16),
             // 录音数量（显示本次守护的录音数）
             _buildSummaryRow(Icons.folder, l10n?.get('saved_recordings') ?? '保存录音', '$_currentSessionRecordingCount ${l10n?.get('count_unit') ?? '个'}'),
-            const SizedBox(height: 20),
-            // 评价
+            const SizedBox(height: 16),
+            // 睡眠评分
+            _buildSummaryRow(Icons.star_rounded, l10n?.get('sleep_score') ?? '睡眠评分', _buildScoreText()),
+            const SizedBox(height: 16),
+            // 鼾声时间线
+            if (_guardStartTime != null) ...[
+              Text(
+                l10n?.get('snore_timeline') ?? '鼾声时间线',
+                style: const TextStyle(color: Colors.white54, fontSize: 12),
+              ),
+              const SizedBox(height: 8),
+              SnoreTimelineWidget(
+                startTime: _guardStartTime!,
+                endTime: DateTime.now(),
+                events: _snoreEventsList,
+                height: 80,
+              ),
+              const SizedBox(height: 16),
+            ],
+            // 个性化建议
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: _totalSnoreEvents == 0 
-                    ? Colors.green.withOpacity(0.2) 
-                    : (_totalSnoreEvents <= 3 ? Colors.orange.withOpacity(0.2) : Colors.red.withOpacity(0.2)),
+                color: _getSummaryAdviceColor().withOpacity(0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    _totalSnoreEvents == 0 ? Icons.sentiment_very_satisfied 
-                        : (_totalSnoreEvents <= 3 ? Icons.sentiment_neutral : Icons.sentiment_dissatisfied),
-                    color: _totalSnoreEvents == 0 ? Colors.green 
-                        : (_totalSnoreEvents <= 3 ? Colors.orange : Colors.red),
-                    size: 24,
-                  ),
+                  Icon(Icons.lightbulb_outline, color: _getSummaryAdviceColor(), size: 20),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      _totalSnoreEvents == 0 
-                          ? (l10n?.get('sleep_quality_good') ?? '太棒了！今晚睡眠质量很好') 
-                          : (_totalSnoreEvents <= 3 ? (l10n?.get('sleep_quality_fair') ?? '睡眠质量一般，注意调整睡姿') : (l10n?.get('sleep_quality_poor') ?? '打鼾较多，建议关注睡眠健康')),
-                      style: TextStyle(
-                        color: _totalSnoreEvents == 0 ? Colors.green 
-                            : (_totalSnoreEvents <= 3 ? Colors.orange : Colors.red),
-                        fontSize: 14,
-                      ),
+                      _getPersonalizedAdvice(l10n),
+                      style: TextStyle(color: _getSummaryAdviceColor(), fontSize: 13),
                     ),
                   ),
                 ],
@@ -2016,14 +2039,78 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
       ],
     );
   }
-  
+
+  // 构建评分文本
+  String _buildScoreText() {
+    if (_snoreEventsList.isEmpty && _totalSnoreEvents == 0) return '100';
+    final tempRecord = SleepRecord(
+      id: 'temp',
+      startTime: _guardStartTime ?? DateTime.now(),
+      endTime: DateTime.now(),
+      snoreCount: _totalSnoreEvents,
+      recordingCount: _currentSessionRecordingCount,
+      monitorMode: _monitorMode,
+      snoreEvents: List<SnoreEvent>.from(_snoreEventsList),
+    );
+    return '${tempRecord.sleepScore}';
+  }
+
+  // 获取建议颜色
+  Color _getSummaryAdviceColor() {
+    if (_totalSnoreEvents == 0) return const Color(0xFF4CAF50);
+    if (_totalSnoreEvents <= 3) return const Color(0xFFFF9800);
+    return const Color(0xFFE53935);
+  }
+
+  // 获取个性化建议（基于时间段分析）
+  String _getPersonalizedAdvice(AppLocalizations? l10n) {
+    if (_totalSnoreEvents == 0) {
+      return '您的睡眠质量非常好！继续保持良好的睡眠习惯。';
+    }
+    
+    if (_snoreEventsList.isEmpty) {
+      if (_totalSnoreEvents <= 3) {
+        return '睡眠质量良好。建议保持规律作息，避免睡前使用电子设备。';
+      }
+      return '打鼾较为频繁，建议关注睡眠健康。可尝试抬高枕头、减轻体重或咨询医生。';
+    }
+    
+    final sorted = List<SnoreEvent>.from(_snoreEventsList)..sort((a, b) => a.time.compareTo(b.time));
+    final severeCount = sorted.where((e) => e.severity == 2).length;
+    final moderateCount = sorted.where((e) => e.severity == 1).length;
+    
+    if (_guardStartTime != null && sorted.isNotEmpty) {
+      final earlyEvents = sorted.where((e) => 
+        e.time.difference(_guardStartTime!).inMinutes < 120).length;
+      if (earlyEvents > sorted.length * 0.6) {
+        return '您的打鼾集中在入睡初期，可能与饮酒、过度疲劳或睡前进食有关。建议睡前2小时避免进食和饮酒。';
+      }
+      
+      final deepSleepEvents = sorted.where((e) => 
+        e.time.hour >= 2 && e.time.hour <= 4).length;
+      if (deepSleepEvents > sorted.length * 0.5) {
+        return '深睡期打鼾明显，建议尝试侧卧睡姿，可以有效减少仰卧时的气道阻塞。';
+      }
+    }
+    
+    if (severeCount > 0) {
+      return '检测到${severeCount}次严重打鼾（峰值超过阈值20dB），建议关注睡眠呼吸健康，必要时咨询耳鼻喉科医生。';
+    }
+    
+    if (moderateCount > sorted.length * 0.5) {
+      return '中度打鼾较多，建议调整睡姿保持侧卧位，适当抬高枕头，避免仰卧。';
+    }
+    
+    return '睡眠质量一般。建议调整睡姿，保持侧卧位可以减少打鼾。';
+  }
+
   // 停止噪音监测
   void _stopNoiseMonitoring() {
     _noiseSubscription?.cancel();
     _noiseSubscription = null;
     _noiseMeter = null;
   }
-  
+
   // 播放真实的录音文件（通用方法，用于首页和监测中）
   Future<void> _playRealRecording(int index) async {
     if (index < _realRecordings.length) {
@@ -2037,7 +2124,6 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
         // 如果当前没有播放，设置播放状态
         if (!_isPlayingRecording) {
           if (_isRunning) {
-            // 如果在监测中，暂停监测
             _stopNoiseMonitoring();
             print('播放录音时暂停监测');
           }
@@ -2068,7 +2154,6 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
         final l10nErr = AppLocalizations.of(context);
         _showErrorSnackBar(l10nErr?.get('play_failed') ?? '播放失败，文件可能已损坏');
         
-        // 如果播放失败，确保重置状态
         if (_isPlayingRecording && _currentPlayingIndex == index) {
           await _stopPlayingRecording();
         }
@@ -2194,6 +2279,7 @@ class _SnoreWatchHomePageState extends State<SnoreWatchHomePage> with TickerProv
       monitorMode: _monitorMode,
       avgDb: avgDb,
       maxDb: maxDb,
+      snoreEvents: List<SnoreEvent>.from(_snoreEventsList),
     );
     
     try {
