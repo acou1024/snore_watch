@@ -1,16 +1,97 @@
-# slept_well
+# 鼾声守望者 Snore Watch
 
-A new Flutter project.
+智能止鼾助手 — 打断鼾声，不只是记录。
 
-## Getting Started
+[![iOS](https://img.shields.io/badge/Platform-iOS-blue)](https://apps.apple.com/app/id6741090498)
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)](https://flutter.dev)
+[![License](https://img.shields.io/badge/License-Proprietary-red)]()
 
-This project is a starting point for a Flutter application.
+## 简介
 
-A few resources to get you started if this is your first Flutter project:
+鼾声守望者是一款 iOS 智能睡眠守护应用。与传统睡眠记录器不同，它能在检测到持续打鼾时**主动干预**——通过渐进式轻柔音乐温和打断鼾声，帮你和枕边人都睡个好觉。
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 核心功能
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 🛡️ 主动止鼾干预
+- 检测到持续打鼾时自动播放渐进式音乐温和唤醒
+- 音量从低到高逐步提升，不会惊醒，只是轻轻打断鼾声
+- 19种内置自然音和轻音乐，支持导入自定义铃声
+- 可选「仅记录」模式，只监测不干预
+
+### 📊 专业睡眠分析
+- 鼾声严重度分级（轻微 / 中度 / 严重）
+- 鼾声时间线可视化（CustomPainter）
+- 基于严重度的睡眠质量评分（0-100分）
+- 个性化建议：根据打鼾时段和严重度给出针对性改善方案
+
+### 🎙️ 录音与数据
+- 自动保存每次打鼾的录音片段
+- 独立录音库，随时回放和管理
+- 数据导出 CSV + 精美报告图片分享
+
+### 📈 长期趋势追踪
+- 7天打鼾趋势图 & 睡眠评分趋势
+- 历史记录详情查看
+- iOS 健康 App 数据同步（HealthKit）
+
+### 🌍 多语言支持
+- 中文 / English
+
+## 技术栈
+
+| 类别 | 技术 |
+|------|------|
+| 框架 | Flutter 3.x (Dart) |
+| 平台 | iOS |
+| 音频监测 | noise_meter + flutter_sound |
+| 音频播放 | audioplayers |
+| 本地存储 | SharedPreferences |
+| 健康数据 | HealthKit (原生 Swift) |
+| 通知 | flutter_local_notifications |
+| CI/CD | Codemagic |
+
+## 项目结构
+
+```
+lib/
+├── main.dart                    # 应用入口
+├── snore_watch.dart             # 核心逻辑（监测/报警/录音/UI）
+├── l10n/
+│   └── app_localizations.dart   # 多语言支持
+├── models/
+│   └── sleep_record.dart        # 数据模型（SleepRecord/SnoreEvent）
+├── pages/
+│   ├── sleep_stats_page.dart    # 睡眠统计页面
+│   ├── recording_library_page.dart  # 录音库页面
+│   └── data_export_page.dart    # 数据导出页面
+├── services/
+│   └── sleep_storage_service.dart   # 本地存储服务
+└── widgets/
+    └── snore_timeline_painter.dart  # 鼾声时间线可视化
+ios/
+├── Runner/
+│   ├── AppDelegate.swift        # 原生代码（HealthKit/音频）
+│   ├── Info.plist               # 权限配置
+│   └── Runner.entitlements      # HealthKit entitlements
+```
+
+## 构建与运行
+
+```bash
+# 安装依赖
+flutter pub get
+
+# iOS 构建
+cd ios && pod install && cd ..
+flutter build ios --release
+```
+
+## 隐私
+
+- 所有数据仅存储在用户设备上
+- 不上传任何个人信息
+- 无需网络连接即可使用
+
+## 版本
+
+当前版本：**2.1.0**
